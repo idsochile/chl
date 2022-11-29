@@ -1,3 +1,3 @@
-# Ocean Health Index for Patagonia of Chile [pat]
+# Ocean Health Index for Chile [chl]
 
 This is the Ocean Health Index repository for Chile.
