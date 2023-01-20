@@ -408,12 +408,24 @@ CS <- function(layers) {
     dplyr::select(year, p_ref)
 
 
-  ##Calculo del score
-  cs<- merge(cs, p_ref)
+##weigth
+  coef<- data.frame(habitat = c("Kelp forest" , "Seagrass", "Tidal Flats"),
+                    w = c(133.1, 138, 129.8))
 
+##Unir la información
+  cs<- merge(cs, p_ref)
+  cs<- merge(cs, coef)
+
+##Calculo del score
   cs_scores<- cs %>%
-    dplyr::mutate(status = (value / p_ref) *100) %>%
-    dplyr:: select(region_id = "rgn_id", year, status)
+    dplyr::mutate(h = (km2 / p_ref)) %>%
+    group_by(rgn_id, year, habitat) %>%
+    dplyr::summarise(A= c(h*w*km2),
+                     B=c(w*km2)) %>%
+    group_by(rgn_id, year) %>%
+    dplyr::summarise(A = sum(A, na.rm = T),
+                     B=  sum(B, na.rm = T)) %>%
+    dplyr::mutate(score= A/B)
 
   ## Estado actual
   cs_status<- cs_scores %>%
