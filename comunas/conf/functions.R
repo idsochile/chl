@@ -399,13 +399,9 @@ CS <- function(layers) {
     AlignDataYears(layer_nm = "cs_kelp_forest", layers_obj = layers) %>%
     dplyr::select( rgn_id, year = "scenario_year", value)
 
-  ##Punto de ref
 
-  p_ref<- cs %>%
-    dplyr::group_by(year) %>%
-    dplyr::summarise(max = max(value)) %>%
-    dplyr::mutate(p_ref = c(max+ (max*0.1))) %>%
-    dplyr::select(year, p_ref)
+  ##Eliminar los NA
+  cs <- cs[!is.na(cs$km2),]
 
 
 ##weigth
@@ -416,8 +412,10 @@ CS <- function(layers) {
   cs<- merge(cs, p_ref)
   cs<- merge(cs, coef)
 
+
 ##Calculo del score
   cs_scores<- cs %>%
+    dplyr::filter(km2 > 1) %>%
     dplyr::mutate(h = (km2 / p_ref)) %>%
     group_by(rgn_id, year, habitat) %>%
     dplyr::summarise(A= c(h*w*km2),
