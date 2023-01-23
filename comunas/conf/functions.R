@@ -896,54 +896,20 @@ LSP <- function(layers) {
   ref_pct_cp <- 30
 
   # select data
-  total_area <-
-    rbind(layers$data$rgn_area_inland1mn,
-          layers$data$rgn_area_offshore3mn) %>% #total offshore/inland areas
-    select(region_id = rgn_id, area_km2, layer) %>%
-    spread(layer, area_km2) %>%
-    select(region_id,
-           area_inland1mn = rgn_area_inland1mn,
-           area_offshore3mn = rgn_area_offshore3mn)
+
+  offshore = SelectLayersData(layers, layers='lsp_prot_area_offshore3mn') %>%
+    dplyr::select( rgn_id = "id_num",  year, value_3 ="val_num")
+
+  inland = SelectLayersData(layers, layers='lsp_prot_area_inland1mn') %>%
+    dplyr::select( rgn_id = "id_num",  year, value_1 ="val_num")
 
 
-  offshore <-
-    AlignDataYears(layer_nm = "lsp_prot_area_offshore3mn", layers_obj = layers) %>%
-    select(region_id = rgn_id,
-           year = scenario_year,
-           cmpa = area_km2)
-  inland <-
-    AlignDataYears(layer_nm = "lsp_prot_area_inland1mn", layers_obj = layers) %>%
-    select(region_id = rgn_id,
-           year = scenario_year,
-           cp = area_km2)
+  lsp_data <- full_join(offshore, inland, by = c("rgn_id", "year"))
 
 
-  # ry_offshore <-  layers$data$lsp_prot_area_offshore3nm %>%
-  #   select(region_id = rgn_id, year, cmpa = a_prot_3nm)
-  # ry_inland <- layers$data$lsp_prot_area_inland1km %>%
-  #   select(region_id = rgn_id, year, cp = a_prot_1km)
-
-  lsp_data <- full_join(offshore, inland, by = c("region_id", "year"))
-
-  # fill in time series for all regions
-  lsp_data_expand <-
-    expand.grid(region_id = unique(lsp_data$region_id),
-                year = unique(lsp_data$year)) %>%
-    left_join(lsp_data, by = c('region_id', 'year')) %>%
-    arrange(region_id, year) %>%
-    mutate(cp = ifelse(is.na(cp), 0, cp),
-           cmpa = ifelse(is.na(cmpa), 0, cmpa)) %>%
-    mutate(pa     = cp + cmpa)
-
-
-  # get percent of total area that is protected for inland1km (cp) and offshore3nm (cmpa) per year
-  # and calculate status score
-  status_data <- lsp_data_expand %>%
-    full_join(total_area, by = "region_id") %>%
-    mutate(
-      pct_cp    = pmin(cp   / area_inland1mn   * 100, 100),
-      pct_cmpa  = pmin(cmpa / area_offshore3mn * 100, 100),
-      status    = (pmin(pct_cp / ref_pct_cp, 1) + pmin(pct_cmpa / ref_pct_cmpa, 1)) / 2
+  # caLcular el status
+  status_data <- lsp_data %>%
+    mutate(status    = (pmin(value_1/ ref_pct_cp, 1) + pmin(value_3 / ref_pct_cmpa, 1)) / 2
     ) %>%
     filter(!is.na(status))
 
@@ -953,7 +919,7 @@ LSP <- function(layers) {
   r.status <- status_data %>%
     dplyr::filter(year == scen_year) %>%
     dplyr::mutate(score = status * 100) %>%
-    dplyr::select(region_id, score) %>%
+    dplyr::select(region_id = rgn_id, score) %>%
     dplyr::mutate(dimension = "status")
 
   # calculate trend
@@ -962,15 +928,6 @@ LSP <- function(layers) {
 
   r.trend <-
     CalculateTrend(status_data = status_data, trend_years = trend_years)
-
-  total_area <-
-    rbind(layers$data$rgn_area_inland1mn,
-          layers$data$rgn_area_offshore3mn)  %>%  #total
-    select(rgn_id, area_km2, habitat = layer)
-
-  total_area["habitat"][total_area["habitat"] == "rgn_area_inland1mn"] <- "inland"
-  total_area["habitat"][total_area["habitat"] == "rgn_area_offshore3mn"] <- "offshore"
-
 
   # return scores
   scores <- dplyr::bind_rows(r.status, r.trend) %>%
