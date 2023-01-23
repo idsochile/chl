@@ -843,17 +843,14 @@ LE = function(scores, layers){
 
 ICO <- function(layers) {
   scen_year <- layers$data$scenario_year
-  lyr1 = c('ico_spp_extinction_status' = 'risk_category')
-  lyr2 = c( 'ico_spp_popn_trend'        = 'popn_trend')
 
-  # cast data ----
-  l_data1 = SelectLayersData(layers, layers=names(lyr1))
-  l_data2 = SelectLayersData(layers, layers=names(lyr2))
-  l_data1 <- select(l_data1, c("id_num", "category", "val_chr"))
-  l_data1<- dplyr:: rename(l_data1, c("risk_category" = "val_chr",'region_id'='id_num', 'sciname' ='category'))
-  l_data2<- select(l_data2, c("id_num", "category", "val_chr"))
-  l_data2<- dplyr:: rename(l_data2, c("popn_trend" = "val_chr",'region_id'='id_num', 'sciname' ='category'))
-  rk<- merge(l_data1, l_data2)
+  lyr1 = SelectLayersData(layers, layers='ico_spp_status') %>%
+    dplyr::select( region_id = "id_num", Specie, status ="val_chr")
+
+  lyr2 = SelectLayersData(layers, layers='ico_spp_trend') %>%
+    dplyr::select( region_id = "id_num", Specie, trend ="val_chr")
+
+  rk<- merge(lyr1, lyr2)
 
 
   # lookup for weights status
@@ -871,12 +868,12 @@ ICO <- function(layers) {
 
   # status
   r.status = data.frame(ddply(rk, .(region_id), function(x){
-    mean(1 - w.risk_category[x$risk_category], na.rm=T) * 100 }))
+    mean(1 - w.risk_category[x$status], na.rm=T) * 100 }))
 
 
   # trend
   r.trend = data.frame(ddply(rk, .(region_id), function(x){
-    mean(w.popn_trend[x$popn_trend], na.rm=T) }))
+    mean(w.popn_trend[x$trend], na.rm=T) }))
 
   # return scores
   s.status = cbind(r.status, data.frame('dimension'='status'))
