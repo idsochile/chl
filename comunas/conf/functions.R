@@ -395,12 +395,14 @@ NP <- function(layers) {
 CS <- function(layers) {
   scen_year <- layers$data$scenario_year
 
-  cs<-
-    AlignDataYears(layer_nm = "cs_kelp_forest", layers_obj = layers) %>%
-    dplyr::select( rgn_id, year = "scenario_year", value)
+  cs = SelectLayersData(layers, layers='cs_habitat_extent') %>%
+    dplyr::select( rgn_id = "id_num",  habitat = "category", year, km2 ="val_num")
+
+  p_ref = SelectLayersData(layers, layers='cs_habitat_pref') %>%
+    dplyr::select( rgn_id = "id_num",  habitat = "category", p_ref ="val_num")
 
 
-  ##Eliminar los NA
+##Eliminar los NA
   cs <- cs[!is.na(cs$km2),]
 
 
@@ -423,27 +425,24 @@ CS <- function(layers) {
     group_by(rgn_id, year) %>%
     dplyr::summarise(A = sum(A, na.rm = T),
                      B=  sum(B, na.rm = T)) %>%
-    dplyr::mutate(score= A/B)
+    dplyr::mutate(status = A/B)
 
   ## Estado actual
   cs_status<- cs_scores %>%
     dplyr::filter(year == scen_year) %>%
-    dplyr::select(region_id , score ="status") %>%
+    dplyr::select(region_id ="rgn_id" , score = status) %>%
     dplyr::mutate(dimension = 'status')
+
   # trend
-
-    trend_years <- (scen_year - 4):(scen_year)
-    cs_trend <-
-      CalculateTrend(status_data =cs_scores, trend_years = trend_years) %>%
+  trend_years <- (scen_year - 4):(scen_year)
+  cs_trend <- CalculateTrend(status_data = cs_scores,
+                             trend_years = trend_years) %>%
       dplyr::mutate(dimension = 'trend')
-
 
 
   cs_score <- dplyr::bind_rows(cs_status, cs_trend) %>%
     dplyr::mutate(goal = 'CS')%>%
     dplyr::select(goal, dimension, region_id, score)
-
-
 
 
   # return scores
@@ -923,7 +922,7 @@ LSP <- function(layers) {
   #   select(region_id = rgn_id, year, cmpa = a_prot_3nm)
   # ry_inland <- layers$data$lsp_prot_area_inland1km %>%
   #   select(region_id = rgn_id, year, cp = a_prot_1km)
-  #
+
   lsp_data <- full_join(offshore, inland, by = c("region_id", "year"))
 
   # fill in time series for all regions
