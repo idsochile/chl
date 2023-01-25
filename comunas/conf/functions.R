@@ -924,10 +924,11 @@ LSP <- function(layers) {
   trend_years <- (scen_year - 4):(scen_year)
 
   r.trend <-
-    CalculateTrend(status_data = status_data, trend_years = trend_years)
+    CalculateTrend(status_data = status_data, trend_years = trend_years) %>%
+    dplyr::mutate(dimension = "trend")
 
   # return scores
-  scores <- dplyr::bind_rows(r.status, r.trend) %>%
+  scores1 <- dplyr::bind_rows(r.status, r.trend) %>%
     mutate(goal = "LSP")
   return(scores[, c('region_id', 'goal', 'dimension', 'score')])
 }
