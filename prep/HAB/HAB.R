@@ -3,13 +3,22 @@ library(dplyr)
 library(reshape2)
 
 
-Hab <- read_excel("prep/HAB/Hab_OHI.xlsx")
+hab <- read_delim("prep/HAB/hab_status_trend_chl_2021.csv",
+                  delim = ";", escape_double = FALSE, trim_ws = TRUE)
 
-sup<- select(Hab, c("rgn_id", "total_km2"))
+hab<- hab %>% select(-c("rgn_name")) %>%
+  melt(id.vars = c("rgn_id", "habitat")) %>%
+  select(rgn_id, habitat, year = "variable","value")
 
-hab<- select(Hab, -c("total_km2", "macro"))
-hab<- melt(hab, id.vars = c("rgn_id"))
-hab$variable<- as.character(hab$variable)
+hab$year<- as.character(hab$year)
+hab$year<- as.numeric(hab$year)
+
+##superficie total de las comunas
+sup<-hab %>% filter(year ==scenario_years)%>%
+  group_by(rgn_id)%>%
+  dplyr::summarise(total_km2= sum(value)) %>%
+    dplyr::select(rgn_id, total_km2)
+
 
 ##Functions
 hab<- merge(hab, sup)
@@ -17,20 +26,20 @@ hab<- merge(hab, sup)
 
 ##Punto de ref
 p_ref<- hab %>%
-  dplyr::mutate(value = c(value*1.1),
-                p_ref = value/ total_km2)  %>%
-  dplyr::group_by(variable) %>%
+  dplyr::mutate(p_ref = value/ total_km2)  %>%
+  dplyr::group_by(habitat) %>%
   dplyr::summarise(ref = max(p_ref,  na.rm = TRUE)) %>%
-  dplyr::select(variable, ref)
+  dplyr::select(habitat, ref)
 
 ## Numero de habitats
 com_hab <- hab[!is.na(hab$value),]
+com<- filter(com_hab, rgn_id == 1)
 com_h1<-data.frame( rgn_id= 1,
-                    n_h = nrow(table(com$variable)))
-for (i in c(2:36)) {
+                    n_h = nrow(table(com$habitat)))
+for (i in c(2:103)) {
   com<- filter(com_hab, rgn_id == i)
   com_h<-data.frame(rgn_id= i,
-                    n_h = nrow(table(com$variable)))
+                    n_h = nrow(table(com$habitat)))
   com_h1<- rbind(com_h1, com_h)
 }
 com_h1 <- com_h1[!is.na(com_h1$n_h),]
@@ -43,7 +52,7 @@ hab<-merge(hab, sup)
 scores_hab<- hab %>%
   dplyr::mutate(Cc= value/total_km2)  %>%
   dplyr::mutate(C= Cc/ref) %>%
-  dplyr::group_by(rgn_id) %>%
+  dplyr::group_by(rgn_id, year) %>%
   dplyr::summarise(c_sum = sum(C,  na.rm = TRUE)) %>%
   dplyr::full_join(com_h1, by= c("rgn_id"))%>%
   dplyr::mutate(status= (c_sum/n_h) *100)
@@ -51,6 +60,7 @@ scores_hab<- hab %>%
 
 ##Status
 scores_hab <- scores_hab %>%
+  filter(year ==scenario_years) %>%
   mutate(dimension = 'status',
          score     = round(status, 4)) %>%
   mutate(goal = 'HAB')%>%
