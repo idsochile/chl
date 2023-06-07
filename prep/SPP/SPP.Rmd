@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(readxl)
 library(dplyr)
+library(dplyr)
 
 ```
 
@@ -20,12 +21,12 @@ library(dplyr)
 estatus <- read_csv("prep/SPP/estatus.csv")
 
 ## Primer factor 
-status <- estatus %>%
-  dplyr::group_by(rgn_id, id) %>%
-  dplyr::summarize(suma = sum(category), n_sp =n()) 
+status <- data %>%
+  dplyr::group_by(rgn_id, sp) %>%
+  dplyr::summarize(suma = sum(IUCN_weight), n_sp =n()) 
 
 
-h<- estatus %>% select(rgn_id, id,  area_km2) 
+h<- data %>% select(rgn_id, grid_id,  grid_area) 
 h<-h[!duplicated(h), ]
 
 status<- merge(status, h)
@@ -35,6 +36,11 @@ status <- status %>%
   dplyr::mutate(B = A * area_km2) %>%
   dplyr::group_by(rgn_id) %>%
   dplyr::summarize(A = sum(B))
+
+
+
+
+
 
 ##Segundo factor
 h<- estatus %>% select(rgn_id, area_km2, id, area_km2) 
@@ -54,9 +60,64 @@ status_spp <- status %>%
   dplyr::select(rgn_id, score)
 
 ##Calculo de la tendencia
-trend_spp<- estatus %>% group_by(rgn_id) %>% summarise(score = mean(trend))
+trend_spp<- estatus %>% group_by(rgn_id) %>% 
+  summarise(score = mean(IUCN_weight))
 
 ```
+
+
+```{r}
+area<- select(sp, rgn_id, area_km2)
+area<- area[!duplicated(area), ]
+
+sp
+
+status <- sp %>%
+  dplyr::mutate(A = (1 - (iucn_weight_sum/sp_count)),
+                     B = A * grid_area)  %>%
+  dplyr::group_by(rgn_id) %>%
+  dplyr::summarize(A = sum(B)) %>%
+  left_join(area, by = c("rgn_id")) %>%
+  dplyr::mutate(score= (A / area_km2))    
+  
+```
+
+
+```{r}
+library(readxl)
+sp <- read_excel("prep/SPP/grid_sp_rgn.xlsx")
+
+status <- sp %>%
+  dplyr::mutate(A = (iucn_weight_sum*grid_area),
+                B = grid_area* sp_count)  %>%
+  group_by(rgn_name) %>%
+  summarise(rspp = c(sum(A))/ c(sum(B)))
+
+xspp<-  status %>%
+  mutate(status = pmax(c((rspp - 0.25)/0.75), 0))
+
+write.table(xspp, "clipboard", sep="\t", row.names=F)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
