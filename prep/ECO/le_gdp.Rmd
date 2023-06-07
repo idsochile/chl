@@ -17,7 +17,7 @@ library(reshape2)
 
 ```{r}
 #Cargar la base de datos de los salarios 
-le_gdp <- read_excel("prep/ECO/le_gdp.xlsx")
+le_gdp <- read_excel("C:/github/chl/prep/ECO/le_gdp.xlsx")
 le_gdp<- select(le_gdp, -c(Comuna))
 
 #Ordenar la tabla en formato largo
@@ -36,5 +36,5 @@ gpd2<- select(gpd2, rgn_id = "Rg_id", Sector, year = "variable", gdp_usd)
 
 
 #guardar la base de datos 
-write.csv(gpd2, "comunas/layers/le_gdp_chl2023.csv", row.names = FALSE, na = "")
+write.csv(gpd2, "C:/github/chl/comunas/layers/le_gdp_chl2023.csv", row.names = FALSE, na = "")
 ```
