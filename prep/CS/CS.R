@@ -1,4 +1,3 @@
-
 library(dplyr)
 library(reshape2)
 
@@ -18,7 +17,7 @@ p_ref<- cs %>%
 cs<- merge(cs, p_ref)
 
 cs_scores<- cs %>%
-  mutate(status = value / p_ref) %>%
+  mutate(status = km2 / p_ref) %>%
   select(region_id = "rgn_id", year, status)
 
 ## Estado actual
