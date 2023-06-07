@@ -17,12 +17,24 @@ library(reshape2)
 
 ```{r}
 #Cargar la base de datos de los salarios 
-gpd <- read_excel("prep/ECO/gpd_.xlsx")
-gpd$rgn_id<- as.factor(gpd$rgn_id)
+le_gdp <- read_excel("prep/ECO/le_gdp.xlsx")
+le_gdp<- select(le_gdp, -c(Comuna))
 
 #Ordenar la tabla en formato largo
-gpd2<-melt(gpd, id.vars = c("rgn_id"))
+gpd2<-melt(le_gdp, id.vars = c("Rg_id", "Sector"))
+
+gpd2<- gpd2 %>%
+  group_by(Rg_id, Sector) %>%
+  mutate(sum = sum(value)) 
+
+gpd2$gdp_usd <- ifelse(gpd2$sum == 0, 
+                       NA, 
+                       gpd2$value)
+
+gpd2<- select(gpd2, rgn_id = "Rg_id", Sector, year = "variable", gdp_usd)
+
+
 
 #guardar la base de datos 
-write.csv(gpd2, "comunas/layers/le_gdp.csv", row.names = FALSE)
+write.csv(gpd2, "comunas/layers/le_gdp_chl2023.csv", row.names = FALSE, na = "")
 ```
