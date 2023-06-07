@@ -13,8 +13,8 @@ library(readxl)
 layers <- read_excel("comunas/layers.xlsx")
 write.csv(layers, "comunas/layers.csv", row.names = FALSE)
 
-scenario_data <- read_excel("scenario_data.xlsx")
-write.csv(scenario_data, "comunas/conf/scenario_data_years.csv", row.names = FALSE)
+#scenario_data <- read_excel("scenario_data.xlsx")
+#write.csv(scenario_data, "comunas/conf/scenario_data_years.csv", row.names = FALSE)
 
 ```
 
