@@ -11,22 +11,19 @@ FIS <- function(layers) {
     # Xfis= estado de las pesquerias pescadas en la naturaleza
     # SS= puntuaciones de estado de las pesquerias
     # B/Bmsy=indicador para informar SS
-    # C= contribucion de la poblaci?n a la captura total
+    # C= contribucion de la poblacion a la captura total
 
 
     ### from script FUNCTIONS global de OHI core
 
   #catch data
-  c <-
-    AlignDataYears(layer_nm = "fis_landings", layers_obj = layers) %>%
-    dplyr::select(rgn_id, Year = scenario_year, Spp, SumLandings)
-
+  c <-SelectLayersData(layers, layers='fis_meancatch') %>%
+    dplyr::select( rgn_id = "id_num", Spp = "category", year, catch ="val_num")
 
   #  b_bmsy data
 
-    b <-
-      AlignDataYears(layer_nm = "fis_b_bmsy", layers_obj = layers) %>%
-      dplyr::select(rgn_id, Year = scenario_year,  Spp, bbmsy)
+    b <- SelectLayersData(layers, layers='fis_b_bmsy') %>%
+      dplyr::select(rgn_id = "id_num", year,  Spp = "category", b_bmsy ="val_num")
 
   # The following stocks are fished in multiple regions and often have high b/bmsy values
   # Due to the underfishing penalty, this actually penalizes the regions that have the highest
@@ -35,16 +32,34 @@ FIS <- function(layers) {
    #   dplyr::arrange(stock_id, year) %>%
    #   data.frame()
 
+    alpha <- 0.5
+    beta <- 0.25
+    lowerBuffer <- 0.95
+    upperBuffer <- 1.05
+
+    b$score = ifelse(
+      b$b_bmsy < lowerBuffer,
+      b$b_bmsy,
+      ifelse (b$b_bmsy >= lowerBuffer &
+                b$b_bmsy <= upperBuffer, 1, NA)
+    )
+    b$score = ifelse(!is.na(b$score),
+                     b$score,
+                     ifelse(
+                       1 - alpha * (b$b_bmsy - upperBuffer) > beta,
+                       1 - alpha * (b$b_bmsy - upperBuffer),
+                       beta
+                     ))
+
+
   ### from script FUNCTIONS global de OHI core
   ####
   # STEP 1. Merge the b/bmsy data with catch data
   ####
 
-  c$Year <- as.numeric(c$Year)# necesito transformar el a?o como numerico
-
   data_fis <- c %>%
-    dplyr::left_join(b, by = c('rgn_id', 'Spp', 'Year')) %>%
-    dplyr::select(rgn_id, Spp, Year, SumLandings, bbmsy)
+    dplyr::left_join(b, by = c('rgn_id', 'Spp', 'year')) %>%
+    dplyr::select(rgn_id, Spp, year, catch, b_bmsy, score)
 
 
   ###
@@ -56,8 +71,8 @@ FIS <- function(layers) {
   ## this takes the mean score within each region and year
   ##
   data_fis_gf <- data_fis %>%
-    dplyr::group_by(rgn_id, Year) %>%
-    dplyr::mutate(mean_score = mean(bbmsy, na.rm = TRUE)) %>%
+    dplyr::group_by(rgn_id, year) %>%
+    dplyr::mutate(mean_score = mean(score, na.rm = TRUE)) %>%
     dplyr::ungroup()
 
 
@@ -65,19 +80,27 @@ FIS <- function(layers) {
   # (when no stocks have scores within a region)
 
   data_fis_gf2 <- data_fis_gf %>%
-    dplyr::group_by(Year) %>%
-    dplyr::mutate(mean_score_global = mean(bbmsy, na.rm = TRUE)) %>%
+    dplyr::group_by(year) %>%
+    dplyr::mutate(mean_score_global = mean(score, na.rm = TRUE)) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(mean_score = ifelse(!is.na(bbmsy), bbmsy, mean_score_global))
+    dplyr::mutate(mean_score = ifelse(!is.na(score), score, mean_score_global))
 
   data_fis_gf3 <- data_fis_gf2 %>%
-    mutate(mean_score = ifelse(!is.na(mean_score), mean_score, mean_score_global))
+    mutate(mean_score = ifelse(!is.na(score), score, mean_score_global))
+
+  ### step 2.1
+  ### Calcular las especies capturadas por region y año
+
+  sp<- c %>%
+    group_by(rgn_id, year) %>%
+    dplyr::summarise(n = n())
 
 
   ### step 3. seleccionamos aquellas columnas que nos interesan
-  #adaptacion PAT
+  #adaptacion CHL
   status_data <- data_fis_gf3 %>%
-    dplyr::select(rgn_id, Spp, Year, SumLandings, mean_score)
+    dplyr::select(rgn_id, Spp, year, catch, mean_score)
+
   ###
   # STEP 4. Calculate status for each region
   ###
@@ -87,18 +110,50 @@ FIS <- function(layers) {
   # sum of mean catch of all species in region/year
   ## adapt to pat
   status_data <- status_data %>%
-    dplyr::group_by(Year, rgn_id) %>%
-    dplyr::mutate(SumCatch = sum(SumLandings)) %>%
+    dplyr::group_by(year, rgn_id) %>%
+    dplyr::mutate(SumCatch = sum(catch)) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(wprop = SumLandings / SumCatch)
+    dplyr::mutate(wprop = catch / SumCatch) %>%
+    left_join(sp, by = c("rgn_id", "year"))
 
   status_data$mean_score<- as.numeric(status_data$mean_score)
 
+  ### condición por b_bmsy
+  ### si el numero de especies capturados por region en bajo
+  ### el b_bmsy de las especies es castigado por la sensibilidad de la pesquera de la comuna
+  buffer_n <- 5
+  buffer_w <- 0.4
+  gama <- 0.3
+
+  status_data$mean_score_f1<-  ifelse(status_data$n == buffer_n,
+                                   status_data$mean_score - c(gama*status_data$mean_score),
+                                   status_data$mean_score)
+
+  buffer_n <- 3
+  buffer_w <- 0.4
+  gama <- 0.4
+
+  status_data$mean_score_f2<-  ifelse(status_data$n == buffer_n ,
+                                      status_data$mean_score_f1  - c(gama*status_data$mean_score_f1),
+                                      status_data$mean_score_f1)
+
+  buffer_n <- 1
+  buffer_w <- 0.4
+  gama <- 0.5
+
+  status_data$mean_score_final<-  ifelse(status_data$n == buffer_n,
+                                      status_data$mean_score_f2 - c(gama*status_data$mean_score_f2),
+                                      status_data$mean_score_f2)
+
+
+
+
   status_data_final <- status_data %>%
-    dplyr::group_by(rgn_id, Year) %>%
-    dplyr::summarize(status = prod(na.omit(mean_score ^ wprop))) %>%
-    dplyr::rename(year = "Year") %>%
+    dplyr::group_by(rgn_id, year) %>%
+    dplyr::summarize(status = prod(na.omit(mean_score_final ^ wprop)))   %>%
     dplyr::ungroup()
+
+
 
 
   ###
@@ -107,7 +162,7 @@ FIS <- function(layers) {
 
   status <-  status_data_final %>%
     dplyr::filter(year == scen_year) %>%
-    dplyr::mutate(score     = round(status * 100, 1),
+    dplyr::mutate(score     = round(status * 100, 100),
            dimension = 'status') %>%
     dplyr::select(region_id = "rgn_id", score, dimension)
 
@@ -119,14 +174,12 @@ FIS <- function(layers) {
   trend <-
     CalculateTrend(status_data = status_data_final, trend_years = trend_years)
 
+  trend <- trend[!is.na(trend$score),]
 
   # assemble dimensions
   scores <- data.frame()
   scores <- rbind(status, trend) %>%
     dplyr::mutate(goal = 'FIS')
-
-  scores <- scores[!is.na(scores$score),]
-
 
   return(scores)
 }
@@ -401,31 +454,36 @@ CS <- function(layers) {
   p_ref = SelectLayersData(layers, layers='cs_habitat_pref') %>%
     dplyr::select( rgn_id = "id_num",  habitat = "category", p_ref ="val_num")
 
+  area = SelectLayersData(layers, layers='rgn_area') %>%
+    dplyr::select( rgn_id = "id_num",  area_km2 ="val_num")
+
+
 
 ##Eliminar los NA
   cs <- cs[!is.na(cs$km2),]
 
 
 ##weigth
-  coef<- data.frame(habitat = c("Kelp forest" , "Seagrass", "Tidal Flats"),
+  coef<- data.frame(habitat = c("Kelp forest" , "Seagrass", "Tidal flats"),
                     w = c(133.1, 138, 129.8))
 
-##Unir la información
-  cs<- merge(cs, p_ref)
-  cs<- merge(cs, coef)
-
-
+  wt<- mean(coef$w)
 ##Calculo del score
+  cs_b<- area %>%
+    mutate(B= area_km2 * wt)
+
   cs_scores<- cs %>%
-    dplyr::filter(km2 > 1) %>%
-    dplyr::mutate(h = (km2 / p_ref)) %>%
+    dplyr::filter(km2 > 0) %>%
+    dplyr::left_join(p_ref, by = c("rgn_id", "habitat")) %>%
+    dplyr::mutate(h = km2 / p_ref) %>%
     group_by(rgn_id, year, habitat) %>%
-    dplyr::summarise(A= c(h*w*km2),
-                     B=c(w*km2)) %>%
-    group_by(rgn_id, year) %>%
-    dplyr::summarise(A = sum(A, na.rm = T),
-                     B=  sum(B, na.rm = T)) %>%
-    dplyr::mutate(status = A/B)
+    left_join(coef, by = "habitat") %>%
+    dplyr::summarise(A = c(h*w*km2)) %>%
+    dplyr::group_by(rgn_id, year)%>%
+    dplyr::summarise(A = sum(A))%>%
+    left_join(cs_b, by = "rgn_id") %>%
+    dplyr::mutate(status = (A/B)*100)
+
 
   ## Estado actual
   cs_status<- cs_scores %>%
@@ -889,35 +947,33 @@ ICO <- function(layers) {
 LSP <- function(layers) {
   scen_year <- layers$data$scenario_year
 
-  ref_pct_cmpa <- 30
-  ref_pct_cp <- 30
+  ref_pct_cmpa <- 40
+  ref_pct_cp <- 40
 
   # select data
-
   offshore = SelectLayersData(layers, layers='lsp_prot_area_offshore3mn') %>%
-    dplyr::select( rgn_id = "id_num",  year, value_3 ="val_num")
+    dplyr::select( region_id = "id_num",  year, cmpa ="val_num")
 
   inland = SelectLayersData(layers, layers='lsp_prot_area_inland1mn') %>%
-    dplyr::select( rgn_id = "id_num",  year, value_1 ="val_num")
+    dplyr::select( region_id = "id_num",  year, cp="val_num")
 
+#######
+  lsp_data <- full_join(offshore, inland, by = c("region_id", "year"))
 
-  lsp_data <- full_join(offshore, inland, by = c("rgn_id", "year"))
-
-
-  # caLcular el status
+############
   status_data <- lsp_data %>%
-    mutate(status    = (pmin(value_1/ ref_pct_cp, 1) + pmin(value_3 / ref_pct_cmpa, 1)) / 2
-    ) %>%
+    mutate(status    = (pmin(cmpa/ ref_pct_cp, 1) + pmin(cp / ref_pct_cmpa, 1)) / 2) %>%
     filter(!is.na(status))
 
 
-  # extract status based on specified year
+  # Score actual
 
-  r.status <- status_data %>%
-    dplyr::filter(year == scen_year) %>%
-    dplyr::mutate(score = status * 100) %>%
-    dplyr::select(region_id = rgn_id, score) %>%
+  r.status<- status_data %>%
+    filter(year == scen_year) %>%
+    select(region_id, score = "status") %>%
     dplyr::mutate(dimension = "status")
+  r.status$score<- r.status$score*100
+
 
   # calculate trend
 
@@ -930,6 +986,7 @@ LSP <- function(layers) {
   # return scores
   scores1 <- dplyr::bind_rows(r.status, r.trend) %>%
     mutate(goal = "LSP")
+
   return(scores[, c('region_id', 'goal', 'dimension', 'score')])
 }
 
@@ -1036,13 +1093,17 @@ HAB <- function(layers) {
   scen_year <- layers$data$scenario_year
 
   ## read in layers
-  hab <-
-    AlignDataYears(layer_nm = "hab_all", layers_obj = layers) %>%
-    dplyr::select(rgn_id, variable, value)
+  hab = SelectLayersData(layers, layers='hab_extension') %>%
+    dplyr::select( rgn_id = "id_num",  year , habitat = "category", value ="val_num")
 
-  sup <-
-    AlignDataYears(layer_nm = "hab_sup", layers_obj = layers) %>%
+
+  ##Functions
+  ##superficie total de las comunas
+  sup<-hab %>% filter(year ==scenario_years)%>%
+    group_by(rgn_id)%>%
+    dplyr::summarise(total_km2= sum(value)) %>%
     dplyr::select(rgn_id, total_km2)
+
 
   ##Functions
   hab<- merge(hab, sup)
@@ -1050,20 +1111,20 @@ HAB <- function(layers) {
 
   ##Punto de ref
   p_ref<- hab %>%
-    dplyr::mutate(value = c(value*1.1),
-                  p_ref = value/ total_km2)  %>%
-    dplyr::group_by(variable) %>%
+    dplyr::mutate(p_ref = value/ total_km2)  %>%
+    dplyr::group_by(habitat) %>%
     dplyr::summarise(ref = max(p_ref,  na.rm = TRUE)) %>%
-    dplyr::select(variable, ref)
+    dplyr::select(habitat, ref)
 
   ## Numero de habitats
   com_hab <- hab[!is.na(hab$value),]
+  com<- filter(com_hab, rgn_id == 1)
   com_h1<-data.frame( rgn_id= 1,
-                      n_h = nrow(table(com_hab$variable)))
-  for (i in c(2:36)) {
+                      n_h = nrow(table(com$habitat)))
+  for (i in c(2:103)) {
     com<- filter(com_hab, rgn_id == i)
     com_h<-data.frame(rgn_id= i,
-                      n_h = nrow(table(com$variable)))
+                      n_h = nrow(table(com$habitat)))
     com_h1<- rbind(com_h1, com_h)
   }
   com_h1 <- com_h1[!is.na(com_h1$n_h),]
@@ -1076,7 +1137,7 @@ HAB <- function(layers) {
   scores_hab<- hab %>%
     dplyr::mutate(Cc= value/total_km2)  %>%
     dplyr::mutate(C= Cc/ref) %>%
-    dplyr::group_by(rgn_id) %>%
+    dplyr::group_by(rgn_id, year) %>%
     dplyr::summarise(c_sum = sum(C,  na.rm = TRUE)) %>%
     dplyr::full_join(com_h1, by= c("rgn_id"))%>%
     dplyr::mutate(status= (c_sum/n_h) *100)
@@ -1084,18 +1145,25 @@ HAB <- function(layers) {
 
   ##Status
   scores_hab <- scores_hab %>%
+    filter(year == scenario_years) %>%
     mutate(dimension = 'status',
            score     = round(status, 4)) %>%
     mutate(goal = 'HAB')%>%
     select(region_id = "rgn_id", goal, dimension, score)
 
-  ##Trend
-  trend_hab<- data.frame(region_id = c(1:36),
-                         goal = 'HAB',
-                         dimension = 'trend',
-                         score = c(rep(0, 36)))
 
-  scores_HAB<- rbind(scores_hab, trend_hab)
+  ##Tendencia
+  #Debido a que el cambio de cobertura de los habitats no estan disponibles al momento de la realización de este indice
+  #Utilizaremos la tedencia 0, suponiendo que ese es el presente estudio es el habitat inicial
+
+  trend_data<- data.frame(region_id = c(1:103),
+                          goal = c(rep("HAB", 103)),
+                          dimension = c(rep("trend", 103)),
+                          score = c(rep(0, 103)))
+
+
+
+  scores<- rbind(scores_hab, trend_data)
 
 
   # return scores
