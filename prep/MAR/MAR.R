@@ -7,14 +7,12 @@ library(readr)
 
 scen_year <- layers$data$scenario_year
 
-mar_sust <-
-  AlignDataYears(layer_nm = "mar_sustainability", layers_obj = layers) %>%
-  dplyr::select(rgn_id,species, sust_coeff)
+mar_sust <- SelectLayersData(layers, layers='mar_sustainability_scores') %>%
+  dplyr::select( rgn_id = "id_num",  species = "category", sust_coeff ="val_num")
 
-mar_harvest <-
-  AlignDataYears(layer_nm = "mar_harvest_tonnes", layers_obj = layers) %>%
-  dplyr::select(rgn_id,species, year = mar_harvest_tonnes_year, tonnes)
 
+mar_harvest <- SelectLayersData(layers, layers='mar_harvest_tonnes') %>%
+  dplyr::select(rgn_id = "id_num",species = "category", year, tonnes = "val_num")
 
 
 c1<- merge(mar_harvest, mar_sust)
