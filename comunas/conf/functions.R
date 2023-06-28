@@ -189,14 +189,12 @@ MAR <- function(layers) {
 
   scen_year <- layers$data$scenario_year
 
-  mar_sust <-
-    AlignDataYears(layer_nm = "mar_sustainability", layers_obj = layers) %>%
-    dplyr::select(rgn_id,species, sust_coeff)
+  mar_sust <- SelectLayersData(layers, layers='mar_sustainability_scores') %>%
+    dplyr::select( rgn_id = "id_num",  species = "category", sust_coeff ="val_num")
 
-  mar_harvest <-
-    AlignDataYears(layer_nm = "mar_harvest_tonnes", layers_obj = layers) %>%
-    dplyr::select(rgn_id,species, year = mar_harvest_tonnes_year, tonnes)
 
+  mar_harvest <- SelectLayersData(layers, layers='mar_harvest_tonnes') %>%
+    dplyr::select(rgn_id = "id_num",species = "category", year, tonnes = "val_num")
 
 
   c1<- merge(mar_harvest, mar_sust)
@@ -249,9 +247,10 @@ MAR <- function(layers) {
   # return scores
   score = rbind(status_a, trend) %>%
     dplyr::mutate(goal = 'MAR')
-  scores = rbind(score, scores)
 
-  return(score)
+  scores<- rbind(score,scores)
+
+  return(scores)
 }
 
 
@@ -259,9 +258,11 @@ FP <- function(layers, scores) {
 
   scen_year <- layers$data$scenario_year
 
-   w <- AlignDataYears(layer_nm = "fp_wildcaught_weight", layers_obj = layers) %>%
-    dplyr::select(region_id = rgn_id, w_fis)
+   w <- SelectLayersData(layers, layers = "fp_wildcaught_weight") %>%
+    dplyr::select(region_id = id_num, w_fis = val_num, year)
   w <- w[!is.na(w$w_fis),]
+
+
 
   # scores
   s <- scores %>%
@@ -270,6 +271,7 @@ FP <- function(layers, scores) {
     dplyr::left_join(w, by = "region_id")  %>%
     dplyr::mutate(w_mar = 1 - w_fis) %>%
     dplyr::mutate(weight = ifelse(goal == "FIS", w_fis, w_mar))
+
 
   ## Some warning messages due to potential mismatches in data:
   ## In the future consider filtering by scenario year so it's easy to see what warnings are attributed to which data
@@ -356,38 +358,32 @@ NP <- function(layers) {
 
   ## load data from layers dataframe
   h_tonnes <-
-    AlignDataYears(layer_nm = "np_harvest_tonnes", layers_obj = layers) %>%
-    dplyr::select(year = scenario_year, region_id = rgn_id, Producto, tonnes)
+    SelectLayersData(layers, layers =  "np_harvest_tonnes") %>%
+    dplyr::select(year, rgn_id = id_num, Producto = category, tonnes = val_num)
 
-  h_tonnes_rel <-
-    AlignDataYears(layer_nm = 'np_harvest_tonnes_relative', layers_obj = layers) %>%
-    dplyr::select(year = scenario_year,
-                  region_id = rgn_id,
-                  Producto,
-                  proportion)
+  h_tonnes_rel <- SelectLayersData(layers, layers =  "np_harvest_tonnes_relative") %>%
+    dplyr::select(year, rgn_id = id_num, Producto = category, tonnes_rel = val_num)
 
-  h_w <-
-    AlignDataYears(layer_nm = "np_harvest_product_weight", layers_obj = layers) %>%
-    dplyr::select(
-      year = scenario_year,
-      region_id = rgn_id,
-      Producto,
-      prod_weight = Weigth
-    )
+  h_tonnes_w <- SelectLayersData(layers, layers =  "np_harvest_tonnes_weigth") %>%
+    dplyr::select(year, rgn_id = id_num, Producto = category, proportion = val_num)
+
+
+  np_fofm <- SelectLayersData(layers, layers =  "np_fofm_scores") %>%
+    dplyr::select(year, rgn_id = id_num, Producto = category, coef = val_num)
+
+  np_seaweed <- SelectLayersData(layers, layers =  "np_seaweed_sust") %>%
+    dplyr::select(year, rgn_id = id_num, Producto = category, coef = val_num)
 
 
   # merge harvest in tonnes and usd
-  np_harvest <- h_tonnes %>%
-    dplyr::full_join(h_tonnes_rel, by = c('region_id', 'Producto', 'year')) %>%
-    dplyr::left_join(h_w, by = c('region_id', 'Producto', 'year'))
+  np_harvest<- left_join(h_tonnes, h_tonnes_w,
+                         by= c("rgn_id", "year", "Producto"))
 
+  np_harvest<- left_join(np_harvest,  h_tonnes_rel,
+                         by =c("rgn_id", "year", "Producto"))
 
   #Sustentabilidad
-  lyr1 = c('np_sust' = 'sustentabilidad')
-  np_sust = SelectLayersData(layers, layers=names(lyr1))
-  np_sust <- dplyr::select(np_sust, c("id_num", "Producto", "Sostenibilidad"))
-  np_sust<- dplyr:: rename(np_sust, c('region_id'='id_num'))
-
+  np_sust<- rbind(np_fofm, np_seaweed)
 
   ##Merge
   np_harvest<- merge(np_harvest, np_sust)
@@ -395,14 +391,13 @@ NP <- function(layers) {
   ## Calcular el estado de cada producto
 
   np_status_all = np_harvest %>%
-    mutate(product_status = proportion * Sostenibilidad)
+    mutate(Pc = tonnes_rel * coef)
 
   ##
   np_status_all = np_status_all %>%
-    filter(!is.na(Sostenibilidad) & !is.na(prod_weight)& !is.na(product_status)) %>%
-    select(region_id, year, Producto, product_status, prod_weight) %>%
-    group_by(region_id, year) %>%
-    dplyr::summarize(status = weighted.mean(product_status, prod_weight)) %>%
+    filter(!is.na(coef) & !is.na(proportion)) %>%
+    group_by(rgn_id, year) %>%
+    dplyr::summarize(status = weighted.mean(Pc* proportion)*100) %>%
     filter(!is.na(status)) %>%
     ungroup()
 
@@ -423,7 +418,7 @@ NP <- function(layers) {
     filter(year == scen_year & !is.na(status)) %>%
     mutate(dimension = 'status',
            score     = round(status, 4)) %>%
-    select(region_id, dimension, score)
+    select(region_id = rgn_id, dimension, score)
 
 
   ### trend
@@ -616,12 +611,14 @@ TR <- function(layers) {
   ## Punto de ref
   p_ref<- tr_modelnew  %>%
     group_by(year) %>%
-    dplyr::summarise(rgn_id, p_max = max(xtr), p_min = min(xtr))
+    dplyr::summarise(rgn_id,
+                     p_max= quantile(xtr, prob=seq(0, 1, length = 11), probs = 0.9),
+                     p_min= quantile(xtr, prob=seq(0, 1, length = 11), probs = 0))
 
   ## Scores
   tr_scores<- merge(p_ref, tr_modelnew)
   tr_scores<- tr_scores %>%
-    mutate(status = c((xtr-p_min)/(p_max-p_min)) ) %>%
+    mutate(status =pmin((xtr-p_min)/(p_max-p_min),1)) %>%
     select(rgn_id, year, status)
 
 
