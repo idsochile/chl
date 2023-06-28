@@ -1,6 +1,7 @@
 library(readxl)
 library(dplyr)
 library(reshape2)
+library(readr)
 
 
 hab <- read_delim("prep/HAB/hab_status_trend_chl_2021.csv",

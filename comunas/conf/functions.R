@@ -1094,7 +1094,6 @@ HAB <- function(layers) {
     dplyr::select( rgn_id = "id_num",  year , habitat = "category", value ="val_num")
 
 
-  ##Functions
   ##superficie total de las comunas
   sup<-hab %>% filter(year ==scenario_years)%>%
     group_by(rgn_id)%>%
@@ -1142,7 +1141,7 @@ HAB <- function(layers) {
 
   ##Status
   scores_hab <- scores_hab %>%
-    filter(year == scenario_years) %>%
+    filter(year ==scenario_years) %>%
     mutate(dimension = 'status',
            score     = round(status, 4)) %>%
     mutate(goal = 'HAB')%>%
@@ -1153,14 +1152,14 @@ HAB <- function(layers) {
   #Debido a que el cambio de cobertura de los habitats no estan disponibles al momento de la realización de este indice
   #Utilizaremos la tedencia 0, suponiendo que ese es el presente estudio es el habitat inicial
 
-  trend_data<- data.frame(region_id = c(1:103),
-                          goal = c(rep("HAB", 103)),
-                          dimension = c(rep("trend", 103)),
-                          score = c(rep(0, 103)))
+  trend_data<- data.frame(region_id = c(1:36),
+                          goal = c(rep("HAB", 36)),
+                          dimension = c(rep("trend", 36)),
+                          score = c(rep(0, 36)))
 
 
 
-  scores<- rbind(scores_hab, trend_data)
+  scores_HAB<- rbind(scores_hab, trend_data)
 
 
   # return scores
@@ -1172,16 +1171,12 @@ SPP <- function(layers) {
 
   scen_year <- layers$data$scenario_year
 
-status <- AlignDataYears(layer_nm = "spp_status", layers_obj = layers) %>%
-   dplyr::filter(scenario_year == scen_year) %>%
-    dplyr::select(region_id = rgn_id, score) %>%
-  dplyr::mutate(dimension = "status") %>%
-  dplyr::mutate(score = score)
+status <- SelectLayersData(layers, layers='spp_status') %>%
+  dplyr::select( region_id = "category",dimension, score = "val_num", goal)
 
-  trend <- AlignDataYears(layer_nm = "spp_trend", layers_obj = layers) %>%
-  dplyr::select(region_id = rgn_id,
-                score) %>%
-  dplyr::mutate(dimension = "trend")
+
+trend <- SelectLayersData(layers, layers='spp_trend') %>%
+  dplyr::select( region_id = "category",dimension, score = "val_num", goal)
 
 scores <- rbind(status, trend) %>%
     dplyr::mutate(goal = 'SPP') %>%
