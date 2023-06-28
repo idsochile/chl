@@ -121,7 +121,7 @@ FIS <- function(layers) {
   ### condición por b_bmsy
   ### si el numero de especies capturados por region en bajo
   ### el b_bmsy de las especies es castigado por la sensibilidad de la pesquera de la comuna
-  buffer_n <- 5
+  buffer_n <- 3
   buffer_w <- 0.4
   gama <- 0.3
 
@@ -129,7 +129,7 @@ FIS <- function(layers) {
                                    status_data$mean_score - c(gama*status_data$mean_score),
                                    status_data$mean_score)
 
-  buffer_n <- 3
+  buffer_n <- 2
   buffer_w <- 0.4
   gama <- 0.4
 
