@@ -222,12 +222,12 @@ sust <- read_excel("prep/NP/produccion.xlsx", sheet = "Hoja2")
 sust <- sust[!is.na(sust$Año),]
 
 coef_sust<- sust %>%
-  select(Especie, Macrozonas, Año, Total) %>%
-  group_by(Macrozonas) %>%
-  summarise(coef = mean(Total)) %>%
+  select(Especie, Macrozona, Año, Total) %>%
+  group_by(Macrozona, Año) %>%
+  dplyr::summarise(coef = mean(Total, na.rm = T)) %>%
   mutate(producto = "Algas")
 
-coef_sust$MACROZONA<- toupper(coef_sust$Macrozonas)
+coef_sust$MACROZONA<- toupper(coef_sust$Macrozona)
 
 dataz["COMUNA"][dataz["COMUNA"] == "CHAÑARAL"] <- "CHANARAL"#asignamos palena con chait?n
 dataz["COMUNA"][dataz["COMUNA"] == "MELINKA"] <- "GUAITECAS"
@@ -246,17 +246,25 @@ p<- merge(data, comunas, all.x = T)
 
 p <- p[!is.na(p$rgn_id),]
 
-p<- select(p, rgn_id, producto, score = coef)
+p<- select(p, rgn_id, producto,year = Año, score = coef)
 
 
-write.csv(coef_sust, "comunas/layers/np_seaweed_sust_chl2023.csv",
+write.csv(p, "comunas/layers/np_seaweed_sust_chl2023.csv",
           row.names = F,
           na = "")
+###### np_harvest_tonnes_releative #####
+
+np2<- np %>%
+  group_by(rgn_id, producto) %>%
+  mutate(max = max(tonnes)) %>%
+  ungroup() %>%
+  mutate(tonnes_rel = tonnes/ max) %>%
+  select(-c("tonnes", "max"))
 
 
-
-
-
+write.csv(np2, "comunas/layers/np_harvest_tonnes_releative_chl2023.csv",
+          row.names = F,
+          na = "")
 
 
 

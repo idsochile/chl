@@ -353,11 +353,11 @@ fis <- read_csv("comunas/layers/fis_meancatch_chl2023.csv")
 
 fp<- fis %>%
   group_by(rgn_id, year) %>%
-  summarise(fis = sum(catch))
+  dplyr::summarise(fis = sum(catch))
 
 fp2<- mar %>%
   group_by(rgn_id, year) %>%
-  summarise(mar = c(sum(tonnes))/1000)
+  dplyr::summarise(mar = c(sum(tonnes))/1000)
 
 fp3<- fp %>%
   left_join(fp2, by= c("rgn_id", "year")) %>%
@@ -366,7 +366,12 @@ fp3<- fp %>%
 fp3$total <- rowSums(fp3[, c(3,4)], na.rm = T)
 
 fp4<- fp3 %>%
-  mutate(w_fis = fis/total)
+  mutate(w_fis = fis/total) %>%
+  select(rgn_id, year, w_fis)
+
 
 write.csv(fp4, "comunas/layers/fp_wildcaught_weight.csv",
+          row.names = F)
+
+write.csv(fp_wildcaught_weight_chl2023, "comunas/layers/fp_wildcaught_weight_chl2023.csv",
           row.names = F)
