@@ -85,7 +85,7 @@ status <- sp %>%
 
 ```{r}
 library(readxl)
-sp <- read_excel("prep/SPP/grid_sp_rgn.xlsx")
+sp <- read_excel("prep/SPP/grid_sp_rgn_chl_2021.xlsx")
 
 status <- sp %>%
   dplyr::mutate(A = (iucn_weight_sum*grid_area),
@@ -94,7 +94,7 @@ status <- sp %>%
   summarise(rspp = c(sum(A))/ c(sum(B)))
 
 xspp<-  status %>%
-  mutate(status = pmax(c((rspp - 0.25)/0.75), 0))
+  mutate(status = pmax(c((rspp - 0.3)/0.70), 0))
 
 write.table(xspp, "clipboard", sep="\t", row.names=F)
 
@@ -104,8 +104,56 @@ write.table(xspp, "clipboard", sep="\t", row.names=F)
 
 
 
+```{r}
+sp<- merge(sp_grid, ESPECIES_MMA, 
+           all.x = T)
 
 
+status<- data.frame(IUCN= c("EX", "CR", "EN", "VU", "NT", "LC"),
+                    cat = c(0,0.2,0.4,0.6,0.8,1))
+sp<- merge(sp, status)
+
+sp2<- sp%>%
+  group_by(grid_id) %>%
+  summarise(sum= sum(cat),
+            n= n())
+
+sp<- sp %>%
+  select(grid_id, area_grid, rgn_id)
+
+sp<- sp[!duplicated(sp), ]
+
+sp3<- merge(sp2,sp)
+
+status <- sp3 %>%
+  dplyr::mutate(A = sum * area_grid,
+                B = area_grid* n)  %>%
+  group_by(rgn_id) %>%
+  summarise(rspp = c(sum(A))/ c(sum(B)))
+
+xspp<-  status %>%
+  mutate(status = pmax(c((rspp - 0.3)/0.70), 0)*100)
+
+write.table(xspp, "clipboard", sep="\t", row.names=F)
+```
+
+
+```{r}
+trend<-  data.frame("trend"= c("Creciente", "Estable", "Decreciendo"),
+                    cat = c(0.5, 0, -0.5))
+
+sp<- merge(sp_grid, ESPECIES_MMA, all.x = T)
+
+sp<- merge(sp, trend)
+
+
+sp2<- sp %>%
+  group_by(rgn_id) %>%
+  summarise(trend= mean(cat))%>%
+  mutate(dimension = "trend")
+
+write.table(sp2, "clipboard", sep="\t", row.names=F)
+```
 
 
 
