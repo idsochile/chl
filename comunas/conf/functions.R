@@ -294,50 +294,21 @@ FP <- function(layers, scores) {
 AO <- function(layers) {
   scen_year <- layers$data$scenario_year
 
-  gini<-
-    AlignDataYears(layer_nm = "ao_coef_gini", layers_obj = layers) %>%
-    dplyr::select(rgn_id,  year = ao_coef_gini_year, Gini_inv)
+  ao_scores <-
+    SelectLayersData(layers, layers =  "ao_scores") %>%
+    dplyr::select(year, region_id = id_num, status = val_num)
 
-  Sust_artes<-
-    AlignDataYears(layer_nm = "ao_coef_sust", layers_obj = layers) %>%
-    dplyr::select(rgn_id,  year = ao_coef_sust_year, Sustcoef_norm)
+  r.status<- ao_scores %>%
+    filter(year == 2021) %>%
+    select(region_id, score = status) %>%
+    mutate(dimension = "status")
 
-  RPA<-
-    AlignDataYears(layer_nm = "ao_rpa", layers_obj = layers) %>%
-    dplyr::select(rgn_id,  year = ao_rpa_year, normperct)
-
-  #Calculo de status
-
-  OA_data_final <- merge(RPA, gini, by.x=c("rgn_id", "year"), by.y=c("rgn_id","year"), all=T)
-
-  OA_data_final_sust <- merge(OA_data_final, Sust_artes, by.x=c("rgn_id","year"), by.y=c("rgn_id","year"), all=T)
-
-  OA_data_final2 <- OA_data_final_sust  %>%
-    mutate(rollmeanBirths=(zoo::rollapply(normperct,5, mean, na.rm=T, partial=T)),
-           rollmeanGini=(zoo::rollapply(Gini_inv,5, mean, na.rm=T, partial=T)),
-           Xao=((rollmeanGini+rollmeanBirths+Sustcoef_norm)/3))
-
-
-  #Para calcular la tendencia
-
-  AO_2017_2021 <- OA_data_final2 %>%
-    filter(year %in% (2017:2021)) %>%
-    dplyr::rename(region_id = "rgn_id", status = "Xao") %>%
-    dplyr::select(region_id,year,status)
-
-  r.status <-  AO_2017_2021 %>%
-    dplyr::filter(year == scen_year) %>%
-    dplyr::mutate(score     = round(status * 100, 1),
-                  dimension = 'status') %>%
-    dplyr::select(region_id, score, dimension)
-
-  # trend
-
+   # trend
 
   trend_years <- (scen_year - 4):(scen_year)
 
   r.trend <-
-    CalculateTrend(status_data = AO_2017_2021, trend_years = trend_years)
+    CalculateTrend(status_data = ao_scores, trend_years = trend_years)
 
 
   # return scores

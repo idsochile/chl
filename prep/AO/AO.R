@@ -4,11 +4,19 @@ library(readr)
 
 op_pesca <- read_csv("comunas/layers/ao_scores.csv")
 
-#write.csv(op_pesca, "comunas/layers/ao_scores.csv", row.names = F)
+write.csv(op_pesca, "comunas/layers/ao_scores.csv", row.names = F)
 
-op_pesca<- edit(op_pesca)
-
+names (op_pesca)[3] = "year"
+names (op_pesca)[4] = "status"
 op_pesca<- op_pesca[!is.na(op_pesca$status),]
+
+regions_list <- read_csv("comunas/spatial/regions_list.csv")
+
+op_pesca<- merge(op_pesca, regions_list)
+op_pesca<- op_pesca %>%
+  select(rgn_id, year, status)
+
+op_pesca$status<- op_pesca$status*100
 
 trend_years <- (scen_year - 4):(scen_year)
 
