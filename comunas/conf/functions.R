@@ -651,17 +651,21 @@ TR <- function(layers) {
 
 LIV<- function(layers) {
 
-  le_wages = SelectLayersData(layers, layers='le_wage_sector_year') %>%
-    dplyr::select(rgn_id = id_num, year, sector = category, wage_usd = val_num)
+  le_wages = SelectLayersData(layers, layers='le_wage_sector') %>%
+    dplyr::select(rgn_id = id_num, year, sector = Sector, wage_usd = val_num)
+  le_wages <- filter(le_wages, year < 2021)
 
-  le_jobs  = SelectLayersData(layers, layers='le_jobs_sector_year') %>%
-    dplyr::select(rgn_id = id_num, year, sector = category, jobs = val_num)
+  le_jobs  = SelectLayersData(layers, layers='le_jobs_sector') %>%
+    dplyr::select(rgn_id = id_num, year, sector = Sector, jobs = val_num)
+  le_jobs <- filter(le_jobs, year < 2021)
 
   le_workforce_size = SelectLayersData(layers, layers='le_workforcesize_adj') %>%
     dplyr::select(rgn_id = id_num, year, jobs_all = val_num)
+  le_workforce_size <- filter(le_workforce_size, year < 2021)
 
   le_unemployment = SelectLayersData(layers, layers='le_unemployment') %>%
     dplyr::select(rgn_id = id_num, year, pct_unemployed = val_num)
+  le_unemployment <- filter(le_unemployment, year < 2021)
 
 
   ## multipliers from Table S10 (Halpern et al 2012 SOM)
@@ -783,13 +787,16 @@ ECO<- function(layers) {
 
   ## read in data layers
   le_gdp   = SelectLayersData(layers, layers='le_gdp')  %>%
-    dplyr::select(rgn_id = id_num, year, gdp_usd = val_num)
+    dplyr::select(rgn_id = id_num, year, gdp_usd = val_num) %>%
+    filter(year < 2021)
 
   le_workforce_size = SelectLayersData(layers, layers='le_workforcesize_adj') %>%
-    dplyr::select(rgn_id = id_num, year, jobs_all = val_num)
+    dplyr::select(rgn_id = id_num, year, jobs_all = val_num) %>%
+    filter(year < 2021)
 
   le_unemployment = SelectLayersData(layers, layers='le_unemployment') %>%
-    dplyr::select(rgn_id = id_num, year, pct_unemployed = val_num)
+    dplyr::select(rgn_id = id_num, year, pct_unemployed = val_num)%>%
+    filter(year < 2021)
 
 
   # calculate employment counts

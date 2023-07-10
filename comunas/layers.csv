@@ -1,26 +1,31 @@
 "targets","layer","filename","fld_value","units","name","description","layer_gl","path_in","fld_id_num","fld_id_chr","fld_category","fld_year","fld_val_num","fld_val_chr","file_exists","year_min","year_max","val_min","val_max","val_0to1","flds_unused","flds_missing","rows_duplicated","num_ids_unique","data_na"
-"CS","cs_habitat_extent","cs_habitat_extent_chl2023.csv","km2","km^2","Extensión del los habitat que capturan carbono",,,"~/github/chl/comunas/layers/cs_habitat_extent_chl2021.csv","rgn_id",,"habitat","year","km2",,TRUE,2017,2021,0,14788.6596845,FALSE,,,,76,FALSE
-"CS","cs_habitat_pref","cs_habitat_pref_chl2023.csv","p_ref","km^2","Punto de referencia, proyectada en 1990",,,"~/github/chl/comunas/layers/cs_habitat_pref_chl2021.csv","rgn_id",,"habitat",,"p_ref",,TRUE,,,0,22106.0911204294,FALSE,,,,76,FALSE
-"LSP","lsp_prot_area_offshore3mn","lsp_prot_area_offshore3mn_chl2023.csv","value_3","proporción",,,,"~/github/chl/comunas/layers/lsp_prot_area_offshore3mn_chl2021.csv","rgn_id",,,"year","value_3",,TRUE,2017,2021,0,100,FALSE,,,,76,FALSE
-"LSP","lsp_prot_area_inland1mn","lsp_prot_area_inland1mn_chl2023.csv","value_1","proporción",,,,"~/github/chl/comunas/layers/lsp_prot_area_inland1mn_chl2021.csv","rgn_id",,,"year","value_1",,TRUE,2017,2021,0,97.2,FALSE,,,,76,FALSE
-"ICO","ico_spp_trend","ico_spp_trend_chl2023.csv","trend","estatus",,,"ico_spp_extinction_status","~/github/chl/comunas/layers/ico_spp_trend_chl2021.csv","rgn_id",,"specie",,,"trend",TRUE,,,,,FALSE,,,,76,
-"ICO","ico_spp_status","ico_spp_status_chl2023.csv","status","tendencia",,,"ico_spp_popn_trend","~/github/chl/comunas/layers/ico_spp_status_chl2021.csv","rgn_id",,"specie",,,"status",TRUE,,,,,FALSE,,,,76,
-"TR","tr_factor","tr_factor_chl2023.csv","factor","factor",,,,"~/github/chl/comunas/layers/tr_factor_chl2021.csv","rgn_id",,,"year","factor",,TRUE,2017,2021,0.1,1,TRUE,,,,76,FALSE
-"TR","tr_jobs_pct_tourism","tr_jobs_pct_tourism_chl2023.csv","ep","proporción",,,,"~/github/chl/comunas/layers/tr_jobs_pct_tourism_chl2021.csv","rgn_id",,,"year","ep",,TRUE,2017,2021,0,0.593,TRUE,,,,76,FALSE
-"TR","tr_sustainability","tr_sustainability_chl2023.csv","s_score","factor",,,,"~/github/chl/comunas/layers/tr_sustainability_chl2021.csv","rgn_id",,,"year","s_score",,TRUE,2017,2021,1,1.11764705882353,FALSE,,,,76,FALSE
-"SPP","spp_status","spp_status_chl2023.csv","score","score",,,,,,,"region_id",,"score",,TRUE,,,50.4992452779276,90.4761904761905,FALSE,"goal,dimension",,,76,FALSE
-"SPP","spp_trend","spp_trend_chl2023.csv","score","tendencia",,,,,,,"region_id",,"score",,TRUE,,,-0.5,0.5,FALSE,"goal,dimension",,,76,FALSE
-"HAB","hab_extension","hab_extension_chl2023.csv","value","km2",,,,"~/github/chl/comunas/layers/hab_extension_chl2021.csv","rgn_id",,"habitat","year","value",,TRUE,2017,2021,0.003067325,14287.67664,FALSE,,,,76,FALSE
-"spatial","rgn_area","regions_list.csv","area_km2","km2",,,,"~/github/chl/comunas/layers/regions_list.csv","rgn_id",,"rgn_name",,"area_km2",,TRUE,,,8.37021450527,32015.4221575,FALSE,,,,76,FALSE
-"spatial","rgn_area_inland1mn","rgn_area_inland1mn_chl2023.csv","area_km2","km2",,,,"~/github/chl/comunas/layers/rgn_area_inland1mn_ch2021.csv","rgn_id",,,,"area_km2",,TRUE,,,27,454769,FALSE,,,,76,FALSE
-"spatial","rgn_area_offshore3mn","rgn_area_offshore3mn_chl2023.csv","area_km2","km2",,,,"~/github/chl/comunas/layers/rgn_area_offshore_3mn_chl2021.csv","rgn_id",,,,"area_km2",,TRUE,,,84,209464,FALSE,,,,76,FALSE
-"MAR","mar_harvest_tonnes","mar_harvest_tonnes_chl2023.csv","tonnes","toneladas",,,,"~/github/chl/comunas/layers/mar_harvest_tonnes_chl2023.csv","rgn_id",,"species_code","year","tonnes",,TRUE,2014,2022,0,286560339,FALSE,,,,76,FALSE
-"MAR","mar_sustainability_scores","mar_sustainability_scores_chl2023.csv","sust_coeff","coeficiente",,,,"~/github/chl/comunas/layers/mar_sustainability_scores_chl2023.csv","rgn_id",,"species",,"sust_coeff",,TRUE,,,0.385,0.695,TRUE,,,,76,FALSE
-"FIS","fis_b_bmsy","fis_b_bmsy_chl2023.csv","b_bmsy","coeficiente",,,,"~/github/chl/comunas/layers/fis_b_bmsy_chl2023.csv","rgn_id",,"spp","year","b_bmsy",,TRUE,2012,2021,0.204681544987977,1.90924496110161,FALSE,,,,76,FALSE
-"FIS","fis_meancatch","fis_meancatch_chl2023.csv","catch","toneladas",,,,"~/github/chl/comunas/layers/fis_meancatch_chl2023.csv","rgn_id",,"spp","year","catch",,TRUE,2012,2021,0,263095,FALSE,,,3571,76,FALSE
-"FIS","fp_wildcaught_weight","fp_wildcaught_weight_chl2023.csv","w_fis","proporción",,,,,"rgn_id",,,"year","w_fis",,TRUE,2021,2021,0,1,TRUE,,,,76,FALSE
-"NP","np_harvest_tonnes","np_harvest_tonnes_chl2023.csv","tonnes","toneladas",,,,,"rgn_id",,"producto","year","tonnes",,TRUE,2017,2021,0,125722,FALSE,,,,76,FALSE
-"NP","np_harvest_tonnes_weigth","np_harvest_tonnes_weigth_chl2023.csv","weight","proporción",,,,,"rgn_id",,"producto","year","weight",,TRUE,2017,2021,0,1,TRUE,,,,76,FALSE
-"NP","np_fofm_scores","np_fofm_scores_chl2023.csv","score","estatus",,,,,"rgn_id",,"producto","year","score",,TRUE,2018,2021,0.318022514772972,0.990004991065516,TRUE,,,,76,FALSE
-"NP","np_seaweed_sust","np_seaweed_sust_chl2023.csv","score","estatus",,,,,"rgn_id",,"producto","year","score",,TRUE,2017,2021,0.3,1,TRUE,,,20,76,FALSE
-"NP","np_harvest_tonnes_relative","np_harvest_tonnes_relative_chl2023.csv","tonnes_rel","proporción",,,,,"rgn_id",,"producto","year","tonnes_rel",,TRUE,2017,2021,0,1,TRUE,,,,76,FALSE
+"CS","cs_habitat_extent","cs_habitat_extent_chl2023.csv","km2","km^2","Extensión del los habitat que capturan carbono",,"","~/github/chl/comunas/layers/cs_habitat_extent_chl2021.csv","rgn_id",,"habitat","year","km2",,TRUE,2017,2021,0,14788.6596845,FALSE,,,,71,FALSE
+"CS","cs_habitat_pref","cs_habitat_pref_chl2023.csv","p_ref","km^2","Punto de referencia, proyectada en 1990",,"","~/github/chl/comunas/layers/cs_habitat_pref_chl2021.csv","rgn_id",,"habitat",,"p_ref",,TRUE,,,0,22106.0911204294,FALSE,,,,71,FALSE
+"LSP","lsp_prot_area_offshore3mn","lsp_prot_area_offshore3mn_chl2023.csv","value_3","proporción","",,"","~/github/chl/comunas/layers/lsp_prot_area_offshore3mn_chl2021.csv","rgn_id",,,"year","value_3",,TRUE,2017,2021,0,100,FALSE,,,,71,FALSE
+"LSP","lsp_prot_area_inland1mn","lsp_prot_area_inland1mn_chl2023.csv","value_1","proporción","",,"","~/github/chl/comunas/layers/lsp_prot_area_inland1mn_chl2021.csv","rgn_id",,,"year","value_1",,TRUE,2017,2021,0,97.2,FALSE,,,,71,FALSE
+"ICO","ico_spp_trend","ico_spp_trend_chl2023.csv","trend","estatus","",,"ico_spp_extinction_status","~/github/chl/comunas/layers/ico_spp_trend_chl2021.csv","rgn_id",,"specie",,,"trend",TRUE,,,,,FALSE,,,,71,
+"ICO","ico_spp_status","ico_spp_status_chl2023.csv","status","tendencia","",,"ico_spp_popn_trend","~/github/chl/comunas/layers/ico_spp_status_chl2021.csv","rgn_id",,"specie",,,"status",TRUE,,,,,FALSE,,,,71,
+"TR","tr_factor","tr_factor_chl2023.csv","factor","factor","",,"","~/github/chl/comunas/layers/tr_factor_chl2021.csv","rgn_id",,,"year","factor",,TRUE,2017,2021,0.1,1,TRUE,,,,71,FALSE
+"TR","tr_jobs_pct_tourism","tr_jobs_pct_tourism_chl2023.csv","ep","proporción","",,"","~/github/chl/comunas/layers/tr_jobs_pct_tourism_chl2021.csv","rgn_id",,,"year","ep",,TRUE,2017,2021,0,0.593,TRUE,,,,71,FALSE
+"TR","tr_sustainability","tr_sustainability_chl2023.csv","s_score","factor","",,"","~/github/chl/comunas/layers/tr_sustainability_chl2021.csv","rgn_id",,,"year","s_score",,TRUE,2017,2021,1,1.11764705882353,FALSE,,,,71,FALSE
+"SPP","spp_status","spp_status_chl2023.csv","score","score","",,"","",,,"region_id",,"score",,TRUE,,,50.4992452779276,90.4761904761905,FALSE,"goal,dimension",,,71,FALSE
+"SPP","spp_trend","spp_trend_chl2023.csv","score","tendencia","",,"","",,,"region_id",,"score",,TRUE,,,-0.5,0.5,FALSE,"goal,dimension",,,71,FALSE
+"HAB","hab_extension","hab_extension_chl2023.csv","value","km2","",,"","~/github/chl/comunas/layers/hab_extension_chl2021.csv","rgn_id",,"habitat","year","value",,TRUE,2017,2021,0.003067325,14287.67664,FALSE,,,,71,FALSE
+"spatial","rgn_area","regions_list.csv","area_km2","km2","",,"","~/github/chl/comunas/layers/regions_list.csv","rgn_id",,"rgn_name",,"area_km2",,TRUE,,,8.37021450527,32015.4221575,FALSE,,,,71,FALSE
+"spatial","rgn_area_inland1mn","rgn_area_inland1mn_chl2023.csv","area_km2","km2","",,"","~/github/chl/comunas/layers/rgn_area_inland1mn_ch2021.csv","rgn_id",,,,"area_km2",,TRUE,,,27,454769,FALSE,,,,71,FALSE
+"spatial","rgn_area_offshore3mn","rgn_area_offshore3mn_chl2023.csv","area_km2","km2","",,"","~/github/chl/comunas/layers/rgn_area_offshore_3mn_chl2021.csv","rgn_id",,,,"area_km2",,TRUE,,,84,209464,FALSE,,,,71,FALSE
+"MAR","mar_harvest_tonnes","mar_harvest_tonnes_chl2023.csv","tonnes","toneladas","",,"","~/github/chl/comunas/layers/mar_harvest_tonnes_chl2023.csv","rgn_id",,"species_code","year","tonnes",,TRUE,2014,2022,0,286560339,FALSE,,,,71,FALSE
+"MAR","mar_sustainability_scores","mar_sustainability_scores_chl2023.csv","sust_coeff","coeficiente","",,"","~/github/chl/comunas/layers/mar_sustainability_scores_chl2023.csv","rgn_id",,"species",,"sust_coeff",,TRUE,,,0.385,0.695,TRUE,,,,71,FALSE
+"FIS","fis_b_bmsy","fis_b_bmsy_chl2023.csv","b_bmsy","coeficiente","",,"","~/github/chl/comunas/layers/fis_b_bmsy_chl2023.csv","rgn_id",,"spp","year","b_bmsy",,TRUE,2012,2021,0.204681544987977,1.90924496110161,FALSE,,,,71,FALSE
+"FIS","fis_meancatch","fis_meancatch_chl2023.csv","catch","toneladas","",,"","~/github/chl/comunas/layers/fis_meancatch_chl2023.csv","rgn_id",,"spp","year","catch",,TRUE,2012,2021,0,263095,FALSE,,,3571,71,FALSE
+"FIS","fp_wildcaught_weight","fp_wildcaught_weight_chl2023.csv","w_fis","proporción","",,"","","rgn_id",,,"year","w_fis",,TRUE,2021,2021,0,1,TRUE,,,,71,FALSE
+"NP","np_harvest_tonnes","np_harvest_tonnes_chl2023.csv","tonnes","toneladas","",,"","","rgn_id",,"producto","year","tonnes",,TRUE,2017,2021,0,125722,FALSE,,,,71,FALSE
+"NP","np_harvest_tonnes_weigth","np_harvest_tonnes_weigth_chl2023.csv","weight","proporción","",,"","","rgn_id",,"producto","year","weight",,TRUE,2017,2021,0,1,TRUE,,,,71,FALSE
+"NP","np_fofm_scores","np_fofm_scores_chl2023.csv","score","estatus","",,"","","rgn_id",,"producto","year","score",,TRUE,2018,2021,0.318022514772972,0.990004991065516,TRUE,,,,71,FALSE
+"NP","np_seaweed_sust","np_seaweed_sust_chl2023.csv","score","estatus","",,"","","rgn_id",,"producto","year","score",,TRUE,2017,2021,0.3,1,TRUE,,,20,71,FALSE
+"NP","np_harvest_tonnes_relative","np_harvest_tonnes_relative_chl2023.csv","tonnes_rel","proporción","",,"","","rgn_id",,"producto","year","tonnes_rel",,TRUE,2017,2021,0,1,TRUE,,,,71,FALSE
+"ECO","le_gdp","le_gdp_chl2023.csv","gdp_usd","USD","",,"","","rgn_id",,"sector","year","gdp_usd",,TRUE,2017,2021,0,15281820147.352,FALSE,,,5,71,FALSE
+"ECO","le_workforcesize_adj","le_workforcesize_adj_chl2023.csv","jobs","numero","",,"","","rgn_id",,,"year","jobs",,TRUE,2017,2021,4.82565377063358,323351.986438163,FALSE,,,,71,FALSE
+"ECO","le_unemployment","le_unemployment_chl2023.csv","percent","proporción","",,"","","rgn_id",,,"year","percent",,TRUE,2017,2021,3.16433718895058,12.4134336091085,FALSE,,,,71,FALSE
+"ECO","le_jobs_sector","le_jobs_sector_chl2023.csv","jobs","numero","",,"","","rgn_id",,"sector","year","jobs",,TRUE,2017,2021,0,38601,FALSE,,,,71,FALSE
+"ECO","le_wage_sector","le_wage_sector_chl2023.csv","wage_usd","USD","",,"","","rgn_id",,"sector","year","wage_usd",,TRUE,2017,2021,0,15281820147.352,FALSE,,,,71,FALSE
