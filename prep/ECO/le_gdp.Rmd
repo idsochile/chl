@@ -24,8 +24,9 @@ le_gdp<- select(le_gdp, -c(Comuna))
 gpd2<-melt(le_gdp, id.vars = c("Rg_id", "Sector"))
 
 gpd2<- gpd2 %>%
-  group_by(Rg_id, Sector) %>%
-  mutate(sum = sum(value)) 
+  dplyr::group_by(Rg_id, Sector) %>%
+  dplyr::mutate(sum = sum(value)) %>%
+  as.data.frame()
 
 gpd2$gdp_usd <- ifelse(gpd2$sum == 0, 
                        NA, 
@@ -33,8 +34,94 @@ gpd2$gdp_usd <- ifelse(gpd2$sum == 0,
 
 gpd2<- select(gpd2, rgn_id = "Rg_id", Sector, year = "variable", gdp_usd)
 
+gpd2 <- gpd2[!is.na(gpd2$gdp_usd),]
 
 
 #guardar la base de datos 
 write.csv(gpd2, "C:/github/chl/comunas/layers/le_gdp_chl2023.csv", row.names = FALSE, na = "")
 ```
+
+
+```{r}
+#Cargar la base de datos de los salarios 
+le_gdp <- read_excel("C:/github/chl/prep/ECO/le_gdp.xlsx")
+le_gdp<- select(le_gdp, -c(Comuna))
+
+#Ordenar la tabla en formato largo
+gpd2<-melt(le_gdp, id.vars = c("Rg_id", "Sector"))
+
+gpd2<- gpd2 %>%
+  dplyr::group_by(Rg_id, Sector) %>%
+  dplyr::mutate(sum = sum(value)) %>%
+  as.data.frame()
+
+gpd2$gdp_usd <- ifelse(gpd2$sum == 0, 
+                       NA, 
+                       gpd2$value)
+
+gpd2<- select(gpd2, rgn_id = "Rg_id", Sector, year = "variable", gdp_usd)
+
+gpd2 <- gpd2[!is.na(gpd2$gdp_usd),]
+
+
+#guardar la base de datos 
+write.csv(gpd2, "C:/github/chl/comunas/layers/le_gdp_chl2023.csv", row.names = FALSE, na = "")
+```
+
+
+
+```{r}
+#Cargar la base de datos de los salarios 
+le_w <- read_excel("prep/ECO/le_workforcesize_adj.xlsx")
+
+#Ordenar la tabla en formato largo
+le_w <-melt(le_w, id.vars = c("rgn_id"))
+
+
+le_w <- select(le_w, rgn_id , year = "variable", jobs = "value")
+
+gpd2 <- gpd2[!is.na(gpd2$gdp_usd),]
+
+
+#guardar la base de datos 
+write.csv(le_w, "C:/github/chl/comunas/layers/le_workforcesize_adj_chl2023.csv", row.names = FALSE, na = "")
+```
+
+```{r}
+#Cargar la base de datos de los salarios 
+le_u <- read_excel("prep/ECO/le_unemployment.xlsx")
+le_u<- le_u[,1:6]
+
+
+#Ordenar la tabla en formato largo
+le_u <-melt(le_u, id.vars = c("RG_id"))
+
+
+le_u <- select(le_u, rgn_id = "RG_id", year = "variable", percent = "value")
+
+
+
+#guardar la base de datos 
+write.csv(le_u, "C:/github/chl/comunas/layers/le_unemployment_chl2023.csv", row.names = FALSE, na = "")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
