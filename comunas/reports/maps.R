@@ -21,7 +21,6 @@ chl<- merge(chl, s, all.x = T)
 ggplot()+
   geom_sf(data = chl, aes(fill= score))+
   scale_fill_gradient(low = "#E5FFFF", high = "#003FFF") +
-  ylim(19, 56)+
   theme_light()
 
 regions_list<- select(regions_list, region_id = "rgn_id",rgn_name )
@@ -33,7 +32,7 @@ s <- s %>%
   arrange(desc(rgn_name))
 
 ggplot(data=s, aes(x = score,  y =rgn_name))+
-  geom_bar(stat="identity", fill = "#3288FF",
+  geom_bar(stat="identity", fill = "#003FFF",
            color = "#E5FFFF")+
   scale_y_discrete(limits = rev(levels(s$rgn_name)))+
   theme_light()
