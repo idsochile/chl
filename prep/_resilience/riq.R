@@ -1,31 +1,66 @@
+library(dplyr)
+library(httr)
+library(rfishbase)
+library(readxl)
+
+###bases de datos ####
+
+marine_spp <- read_csv("prep/_resilience/marine_spp.csv")
+table(marine_spp$SPP)
+marine_spp["SPP"][marine_spp["SPP"] == "SARDINA ESPA\xd1OLA"] <- "SARDINA ESPAÑOLA"
+marine_spp["SPP"][marine_spp["SPP"] == "ATUN ALETA AMARILLA / KAHI AVE AVE"] <- "ATUN ALETA AMARILLA"
+marine_spp["SPP"][marine_spp["SPP"] == "ATUN OJOS GRANDES / KAHI MATA TATA"] <- "ATUN OJOS GRANDES"
+marine_spp["SPP"][marine_spp["SPP"] == "CABRILLA ESPA\xd1OLA"] <- "CABRILLA ESPAÑOLA"
+marine_spp["SPP"][marine_spp["SPP"] == "TIBURON DE GALAPAGOS / MANGO"] <- "TIBURON DE GALAPAGOS"
+marine_spp["SPP"][marine_spp["SPP"] == "CABRILLA ESPA\xd1OLA "] <- "CABRILLA ESPAÑOLA"
+marine_spp["SPP"][marine_spp["SPP"] == "CABRILLA ESPA\xd1OLA "] <- "CABRILLA ESPAÑOLA"
+
+nom <- read_excel("prep/_resilience/nom_sp.xlsx")
+
+marine_spp<- merge(marine_spp, nom)
+marine_spp <- marine_spp[!is.na(marine_spp$n_cientifico),]
+
+marine_spp<- select(marine_spp, rgn_id, sp =n_cientifico)
+
+sp_grid <- read_excel("prep/SPP/sp_grid.xlsx")
+
+sp_grid<- sp_grid %>%
+  select(rgn_id, sp)
+
+sp_grid<- sp_grid[-(1:28),]
 
 
-sp <- estatus %>%
-  separate("scientific", into=c("s1","s2","s3", "s4"), sep=" ")
+data<- rbind(marine_spp, sp_grid)
 
-sp <- sp %>%
-  unite(col='specie', c('s1', 's2'), sep=' ')  %>%
-  filter(year >= 2000) %>%
-  select(rgn_id, specie)
+data<- data[!duplicated(data), ]
 
-ico<- ico_spp_extinction_status_pat2021 %>%
-  select(rgn_id = "reg_id", specie)
+sp_grid <- read_excel("prep/SPP/sp_grid.xlsx")
+
+prot<- read_excel("prep/_resilience/prot.xlsx",
+                  sheet = "regiones") %>%
+  select(rgn_id, region)
 
 
-t_sp<- rbind(sp, ico)
-t_sp<- t_sp[!duplicated(t_sp), ]
+data<- merge(data, prot) %>%
+  select(region, sp)
 
-riq<-data.frame(table(t_sp$rgn_id))
-riq<- riq %>% rename(rgn_id = rgnid)
+data<- data[!duplicated(data), ]
 
-riq_sp<- merge(riq, region_list)
+data1<- data %>%
+  group_by(region) %>%
+  summarise(n_sp = n())
 
-riq_sp<- riq_sp %>% mutate(pond = Freq/area_km2,
-                           score = pond/ 0.1613294189)  %>%
-  select(rgn_id = rgnid, 	resilience_score = score)
+regions_list <- read_csv("comunas/spatial/regions_list.csv")
 
-#Punto de referencia la segunda comuna con mayor proporción: 0.1613294189 en Curaco de Velez
+data3<- regions_list %>%
+  select(-rgn_name) %>%
+  left_join(prot, by= "rgn_id") %>%
+  group_by(region) %>%
+  summarise(area = sum(area_km2)) %>%
+  left_join(data1, by= "region") %>%
+  mutate(riq = (n_sp/area)*10)
 
+data3$i_riq<- rescale(data3$riq)
 
 
 
