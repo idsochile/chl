@@ -1,0 +1,152 @@
+est_pesq_chl2021: Estado óptimo de las pesquerías.
+
+1.Institución recolectora original (cuál institución hizo la recolección de los datos de su fuente).
+
+ - Instituto Milenio en Socio-Ecología Costera (SECOS).
+ - Centro de Investigación Dinámica de Ecosistemas Marinos de Altas Latitudes (IDEAL).  
+
+2.Institución que provee los datos a este proyecto (si es distinta de la recolectora).
+
+ - Subsecretaría de Pesca y Acuicultura (SUBPESCA). 
+
+3.Citas detalladas de la fuente, si se trata de uno o más artículos científicos.
+
+- Subsecretaria de Pesca y Acuicultura (SUBPESCA). 2021. Informe Estado de la situación de las principales pesquerías chilenas, 2021. 
+
+4.Método de captura de los datos. Si fue un estudio realizado para obtener esos datos, si se hizo utilizando algún instrumento de medición, cuál método se aplicó, si se utilizó una encuesta o formulario para recogerlos, etc.
+ 
+  i) Los datos se extrajeron desde el informe anual del estado de las pesquerías. Los estados de las pesquerías son: sub-explotada, plena explotación, sobre-explotada y agotada. 
+ ii) Se asignaron valores numéricos a estas categorias: sub-explotada = 4, plena explotación =3, sobre-explotada = 2 y agotada = 1.
+iii) Con el fin de representar el estado en función de la resiliencia ecológica, se determino un valor óptimo teórica basado en el producto entre el nº de especies * el mejor estado de explotación (sub-explotada =4)
+ iv) Se calculó el valor real basado en el producto entre nº de especies * categorías de estado para finalmente obtener un cociente entre valor real / valor teórico.
+
+5.Período de tiempo que cubren los datos (año desde y año hasta). O enumeración de años si no son consecutivos.
+
+ - 2021.
+
+6. Unidad en la cual vienen los valores.
+
+ - Índice (cociente entre valor real / valor teórico).
+
+7.Significado o explicación de qué significan los valores.
+
+ - Los valores del índice mas altos nos indican que el estado de las pesquerias estan en su mayoría en un estado sub-explotadas, lo que es favorable para la resiliencia ecológica de una región.
+ - Valores mas bajos nos indican que las especies que se pescan en una región dada están catalogadas en sobre-explotadas o agotadas, lo que disminuye la capacidad de resiliencia ecológica.
+
+8.Observación o comentario sobre los datos.
+
+ - Los valores fueron estimados a escala regional, asignando ese valor a cada comuna según corresponda.
+
+9.Significado y explicación de las columnas que se incluyen en el archivos. 
+
+ - La primera columna se identifica la región dentro del área de estudio.
+ - La segunda columna refleja el cociente (índice) entre valor real y valor teórico.
+
+rgn_id	Esta. Pesque
+1	0,369047619
+2	0,380952381
+3	0,317857143
+4	0,404761905
+5	0,226190476
+6	0,166666667
+7	0,130952381
+8	0,380952381
+9	0,30952381
+10	0,226190476
+11	0,333333333
+12	0,404761905
+13	0,273809524
+14	0,369047619
+15	0,369047619
+16	0,380952381
+17	0,380952381
+18	0,30952381
+19	0,369047619
+20	0,380952381
+21	0,166666667
+22	0,404761905
+23	0,380952381
+24	0,404761905
+25	0,369047619
+26	0,404761905
+27	0,30952381
+28	0,333333333
+29	0,404761905
+30	0,273809524
+31	0,380952381
+32	0,369047619
+33	0,380952381
+34	0,369047619
+35	0,369047619
+36	0,30952381
+37	0,380952381
+38	0,166666667
+39	0,380952381
+40	0,404761905
+41	0,226190476
+42	0,30952381
+43	0,226190476
+44	0,333333333
+45	0,369047619
+46	0,333333333
+47	0,273809524
+48	0,130952381
+49	0,404761905
+50	0,369047619
+51	0,369047619
+52	0,404761905
+53	0,380952381
+54	0,333333333
+55	0,404761905
+56	0,273809524
+57	0,380952381
+58	0,380952381
+59	0,130952381
+60	0,369047619
+61	0,333333333
+62	0,369047619
+63	0,369047619
+64	0,369047619
+65	0,404761905
+66	0,369047619
+67	0,130952381
+68	0,130952381
+69	0,369047619
+70	0,380952381
+71	0,380952381
+72	0,130952381
+73	0,380952381
+74	0,380952381
+75	0,380952381
+76	0,380952381
+77	0,380952381
+78	0,380952381
+79	0,369047619
+80	0,380952381
+81	0,130952381
+82	0,273809524
+83	0,369047619
+84	0,130952381
+85	0,273809524
+86	0,404761905
+87	0,369047619
+88	0,404761905
+89	0,273809524
+90	0,273809524
+91	0,130952381
+92	0,404761905
+93	0,369047619
+94	0,273809524
+95	0,404761905
+96	0,130952381
+97	0,166666667
+98	0,404761905
+99	0,273809524
+100	0,369047619
+101	0,369047619
+102	0,369047619
+103	0,369047619
+
+
+10.Fecha de revisión: 
+ - 13/06/2023.

@@ -2,6 +2,7 @@ library(dplyr)
 library(httr)
 library(rfishbase)
 library(readxl)
+library(readr)
 
 ###bases de datos ####
 
@@ -62,7 +63,10 @@ data3<- regions_list %>%
 
 data3$i_riq<- rescale(data3$riq)
 
+data4<- merge(data3, prot) %>%
+  select(rgn_id, resilience_score = riq)
 
+write.csv(data4, "comunas/layers/species_diversity_chl2023.csv", row.names = F, na = "")
 
 
 
