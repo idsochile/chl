@@ -70,7 +70,7 @@ data_art3<- data_art2[!duplicated(data_art2), ]
 comunas <- read_csv("comunas/spatial/regions_list.csv")
 comunas<- mutate(comunas, "COMUNA" = toupper(comunas$rgn_name))
 comunas<- select(comunas, rgn_id, COMUNA)
-
+data1<-datac
 
 data1<- data_art3
 data1<- as.data.frame(data1)
@@ -138,5 +138,15 @@ comunas<- mutate(comunas, "COMUNA" = toupper(comunas$rgn_name))
 comunas<- select(comunas, rgn_id, COMUNA)
 
 
-alls2<- merge(alls, comunas, all.x = T)
+alls2<- merge(datac, comunas, all.x = T)
 alls2<- as.data.frame(alls2)
+
+
+g<- data1 %>%
+  filter(AÑO == 2021) %>%
+  group_by(rgn_id) %>%
+  summarise(total = sum(total)) %>%
+  select(rgn_id, total)
+
+
+write.table(g, "clipboard", sep="\t", row.names=F)
