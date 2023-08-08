@@ -31,6 +31,9 @@ s$rgn_name <- factor(s$rgn_name, levels = factor)
 s <- s %>%
   arrange(desc(rgn_name))
 
+write.table(s, "clipboard", sep="\t", row.names=F)
+
+
 ggplot(data=s, aes(x = score,  y =rgn_name))+
   geom_bar(stat="identity", fill = "#003FFF",
            color = "#E5FFFF")+
