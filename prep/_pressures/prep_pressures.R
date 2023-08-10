@@ -75,9 +75,8 @@ data<- c2
 
 ########### ##########
 
-data <- read_csv("C:/R/OHI/data/insost_pesca.csv")
-
-data<- select(data, rgn_id, pressure_score)
+data <- read_excel("C:/R/OHI/data/indrustrias_uf (1).xlsx")
+data<- select(data, rgn_name = Comuna, pressure_score = UF)
 
 
 data$pressure_score<- rescale_max(data$pressure_score)
@@ -85,12 +84,12 @@ data$pressure_score<- rescale_max(data$pressure_score)
 names (data)[2] = "pressure_score"
 data <- data[!is.na(data$rgn_id),]
 data$pressure_score<- data$pressure_score / 100
-#data<- merge(data, names)
+data<- merge(data, names, all.x = T)
 
-#data<- select(data, rgn_id, pressure_score)
+data<- select(data, rgn_id, pressure_score)
 
 
-write.csv(data, "comunas/layers/des_habitat_costero_chl2023.csv", row.names = F)
+write.csv(data, "comunas/layers/con_industrial_chl2023.csv", row.names = F)
 
 
 
@@ -117,10 +116,11 @@ for (i in list$list) {
   data<- read_csv(ruta)
   names (data)[2] = "pressure_score"
   data$pressure_score <- 1- data$pressure_score
+i<- "sp_invasoras_chl2023.csv"
 
-  nombre<- paste("comunas/layers/pres", i, sep = "_")
+  nombre<- paste("comunas/layers/", i, sep = "")
 
-  write.csv(data, nombre , row.names = F)
+  write.csv(sp_invasoras_chl2023, nombre , row.names = F)
 }
 
 
