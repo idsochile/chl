@@ -198,8 +198,8 @@ chl<- st_read("comunas/spatial/rgn_cl.shp",
               crs ="+init=epsg:4326") %>%
   select(rgn_id = regin_d, rgn_name =regn_nm )
 
-ggplot() + geom_sf(data= chl)
-+ geom_sf(data = puntos)
+#ggplot() + geom_sf(data= chl)
+#+ geom_sf(data = puntos)
 
 Value<- p %>% mutate(ind = raster::extract(est.raster, puntos))
 
@@ -217,7 +217,6 @@ p3 <- p2 %>%
   select(rgn_id,rgn_name, mean, median, std_value)
 
 write.table(p3, "clipboard", sep="\t", row.names=F)
-
 
 #### Densidad de centros ####
 
@@ -255,7 +254,7 @@ coordenadas<- data.frame(xmin=c(-75, -75, -75),
 coords<- as.data.frame(coords)
 
 ##filtrar coordenadas
-i<-1
+i<-3
 c3<-filter(coords,
            X  > coordenadas[i,1],
            Y  > coordenadas[i,2],
@@ -263,17 +262,15 @@ c3<-filter(coords,
            Y  < coordenadas[i,4])
 
 # get the coordinates
-coordinates <- coords[,1:2]
+coordinates <- c3[,1:2]
 
 
 # compute the 2D binned kernel density estimate
 est <- bkde2D(coordinates,
               bandwidth=c(0.05,0.05), #suaviza la distribucion
               gridsize=c(501L,501L), #2500 metros aproximadamente
-              #range.x=list(c(coordenadas[i,1],coordenadas[i,2]),
-              #             c(coordenadas[i,3],coordenadas[i,4])))
-              range.x = list(c(-80,-56),
-                             c(-46,-22)))
+              range.x=list(c(coordenadas[i,1],coordenadas[i,2]),
+                          c(coordenadas[i,3],coordenadas[i,4])))
 
 ##range.x -> la diferencia en grados de minimas y maximas debe siempre ser la misma
 
@@ -291,8 +288,6 @@ crs(est.raster) <-  "+init=epsg:4326"
 #ymax(est.raster) <- coordenadas[i,4]
 # visually inspect the raster output
 plot(est.raster)
-
-writeRaster(est.raster, filename="dc1.tif", format="GTiff", overwrite=TRUE)
 
 summary(est.raster)
 poligono<- rasterToPolygons(est.raster, dissolve = TRUE)
@@ -329,12 +324,6 @@ write.table(p3, "clipboard", sep="\t", row.names=F)
 
 
 
-chlt<- st_read("c:/R/OHI/shape/comunasohi.shp")
-chlt <- st_transform(chlt, "+init=epsg:4326")
-
-
-
-ggplot()+ geom_sf(data = chl) + geom_sf(data = chlt)
 
 
 
