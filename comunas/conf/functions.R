@@ -491,58 +491,60 @@ CP <- function(layers) {
 
 
   # get data together:
-  extent <- AlignManyDataYears(extent_lyrs) %>%
-    dplyr::filter(scenario_year == scen_year) %>%
-    dplyr::select(region_id = rgn_id, habitat, extent = km2) %>%
-    dplyr::mutate(habitat = as.character(habitat))
+    extent <-
+    SelectLayersData(layers, layers =  "cp_habitat_extent") %>%
+    dplyr::select(year, rgn_id = id_num, habitat = category, km2 = val_num)
 
-  health <- AlignManyDataYears(health_lyrs)  %>%
-    dplyr::filter(scenario_year == scen_year) %>%
-    dplyr::select(region_id = rgn_id, habitat, health) %>%
-    dplyr::mutate(habitat = as.character(habitat))
+
+
+  health <-
+    SelectLayersData(layers, layers =  "cp_habitat_health") %>%
+    dplyr::select(year, rgn_id = id_num, habitat = category, health = val_num)
+
+  health$health <- health$health/100
 
   d<- merge(extent, health)
 
-  trend <- AlignManyDataYears(trend_lyrs) %>%
-    dplyr::select(region_id = rgn_id, habitat, trend) %>%
-    dplyr::mutate(habitat = as.character(habitat))
+  trend <-
+    SelectLayersData(layers, layers =  "cp_habitat_trend") %>%
+    dplyr::select(rgn_id = id_num, habitat = category, trend = val_num)
 
-  d<- merge(d, trend)
+  d<- merge(d, trend, all.x = T)
 
   ##Rankeo del habitat
-  habitat.rank <- data.frame(habitat = c('Macrocystis',  'Marismas' ,  'Playas' ,  'Tepu'),
+  habitat.rank <- data.frame(habitat = c("Macrocystis" ,"Bosques y matorrales" ,"Marismas y humedales", "Playas y dunas"),
                     rank =c(1,  1, 1, 1)  )
 
-  d<- merge(d, habitat.rank)
+  d<- merge(d, habitat.rank, all = T)
 
   ##scores
   scores_CP <- d %>%
-    dplyr::filter(!is.na(rank) & !is.na(health) & !is.na(extent)) %>%
-    dplyr::group_by(region_id) %>%
-    dplyr::summarize(score = pmin(1, sum(rank * health * extent, na.rm = TRUE) /
-                                    (sum(sum(extent) * rank, na.rm = TRUE
-                                    ))) * 100) %>%
+    dplyr::filter(!is.na(rank) & !is.na(health) & !is.na(km2)) %>%
+    filter(year == 2021) %>%
+    dplyr::group_by(rgn_id) %>%
+    dplyr::summarize(score = pmin(1, sum(rank * health * km2, na.rm = TRUE) /
+                                    (sum(km2 * rank, na.rm = TRUE))) * 100) %>%
     dplyr::mutate(dimension = 'status') %>%
     ungroup()
 
   d_trend = d %>%
-    filter(!is.na(rank) & !is.na(trend) & !is.na(extent))
+    filter(!is.na(rank) & !is.na(trend) & !is.na(km2))
   if (nrow(d_trend) > 0 ){
     scores_CP <- dplyr::bind_rows(
       scores_CP,
       d_trend %>%
-        group_by(region_id) %>%
+        group_by(rgn_id) %>%
         dplyr::summarize(
-          score = sum(rank * trend * extent, na.rm = TRUE) / (sum(extent * rank, na.rm =
-                                                                    TRUE)),
+          score = sum(rank * trend * km2, na.rm = TRUE) /
+            (sum(km2 * rank, na.rm = TRUE)),
           dimension = 'trend'))
   }
 
   scores_CP<- scores_CP %>%
     dplyr::mutate(goal = 'CP') %>%
-    dplyr::select(goal, dimension, region_id, score)
+    dplyr::select(goal, dimension, region_id = rgn_id, score)
 
-
+  write.table(scores_CP, "clipboard", sep="\t", row.names=F)
 
   # return scores
   return(scores_CP)
@@ -999,36 +1001,32 @@ CW <- function(layers) {
 
 
   # layers
-  prs = c('po_pathogen' = 'a',
-          'po_nutrients_3nm' = 'u',
-          'po_chemical' = 'l',
-          'po_trash'     = 'd',
-          'po_pathogens_fan' = 'f')
+  quim<-  SelectLayersData(layers, layers =  "cw_conquimica") %>%
+    dplyr::select(rgn_id = id_num, val_num)
 
-  trends<-c('cw_nutrient_trend'  = 'fert_trend',
-            'cw_coastalpopn_trend' = 'popn_trend',
-            'cw_pathogen_trend'    = 'path_trend')
+  pat<-  SelectLayersData(layers, layers =  "cw_conpatogenos") %>%
+    dplyr::select(rgn_id = id_num, val_num)
+
+  nutmar<-  SelectLayersData(layers, layers =  "cw_connutrientesmar") %>%
+    dplyr::select(rgn_id = id_num, val_num)
+
+  nutter<-  SelectLayersData(layers, layers =  "cw_connutrientester") %>%
+    dplyr::select(rgn_id = id_num, val_num)
+
+  bas<-  SelectLayersData(layers, layers =  "cw_conbasura") %>%
+    dplyr::select(rgn_id = id_num, val_num)
 
 
 # para calcular la media de los patogenos por saneamiento y por fan
-  p = SelectLayersData(layers, layers=names(prs))
-  pres_data1<-  p %>% filter(layer %in% c('po_pathogen', 'po_pathogens_fan')) %>%
-    group_by(id_num) %>%
+  pres_data1<-  rbind(nutter, nutmar) %>%
+    group_by(rgn_id) %>%
     dplyr::summarise(value= mean(val_num)) %>%
-    select(region_id = id_num, value )
+    select(region_id = rgn_id, value )
 
 #Agregar todos los datos
-  pres_data<- p %>% filter(layer %in% c('po_nutrients_3nm' , 'po_chemical',
-                                        'po_trash' )) %>%
-    select(region_id = id_num, value = val_num) %>%
+  pres_data<- rbind(quim, pat, bas) %>%
+    select(region_id = rgn_id, value = val_num) %>%
     rbind(pres_data1)
-
-  t = SelectLayersData(layers, layers=names(trends))
-  trend_data<- t %>% select(region_id = id_num, value = val_num)
-  # get data together:
-#  prs_data <- AlignManyDataYears(prs_lyrs) %>%
-#    dplyr::filter(scenario_year == scen_year) %>%
-#    dplyr::select(region_id = rgn_id, value = pressure_score)
 
   d_pressures <- pres_data %>%
     dplyr::mutate(pressure = 1 - value) %>%  # invert pressure
@@ -1041,9 +1039,33 @@ CW <- function(layers) {
 
 
   # get trend data together:
-#  trend_data <- AlignManyDataYears(trend_lyrs) %>%
-#    dplyr::filter(scenario_year == scen_year) %>%
-#    dplyr::select(region_id = rgn_id, value = trend)
+  # layers
+  quim<-  SelectLayersData(layers, layers =  "cw_conquimica_trend") %>%
+    dplyr::select(rgn_id = id_num, val_num)
+
+  pat<-  SelectLayersData(layers, layers =  "cw_conpatogenos_tren") %>%
+    dplyr::select(rgn_id = id_num, val_num)
+
+  nutmar<-  SelectLayersData(layers, layers =  "cw_connutrientesmar_trend") %>%
+    dplyr::select(rgn_id = id_num, val_num)
+
+  nutter<-  SelectLayersData(layers, layers =  "cw_connutrientester_trend") %>%
+    dplyr::select(rgn_id = id_num, val_num)
+
+  bas<-  SelectLayersData(layers, layers =  "cw_conbasura_trend") %>%
+    dplyr::select(rgn_id = id_num, val_num)
+
+
+  # para calcular la media de los patogenos por saneamiento y por fan
+  trend_data1<-  rbind(nutter, nutmar) %>%
+    group_by(rgn_id) %>%
+    dplyr::summarise(value= mean(val_num)) %>%
+    select(region_id = rgn_id, value )
+
+  #Agregar todos los datos
+  trend_data<- rbind(quim, pat, bas) %>%
+    select(region_id = rgn_id, value = val_num) %>%
+    rbind(pres_data1)
 
   d_trends <- trend_data %>%
     dplyr::mutate(trend = -1 * value)  %>%  # invert trends
