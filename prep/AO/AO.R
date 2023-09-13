@@ -1,10 +1,16 @@
 library(readr)
+library(dplyr)
 
 
 
-op_pesca <- read_csv("comunas/layers/ao_scores.csv")
+op_pesca <- read_csv("prep/AO/op_pesca_edit.csv")
 
-write.csv(op_pesca, "comunas/layers/ao_scores.csv", row.names = F)
+op_pesca<- op_pesca %>%
+  select(rgn_id, year = Year, status =  newXao)
+
+
+
+write.csv(op_pesca, "comunas/layers/ao_scores_chl2023.csv", row.names = F)
 
 names (op_pesca)[3] = "year"
 names (op_pesca)[4] = "status"
