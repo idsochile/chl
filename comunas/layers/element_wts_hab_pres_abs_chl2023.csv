@@ -1,0 +1,509 @@
+"rgn_id","habitat","boolean"
+1,"Algas",1
+2,"Algas",1
+3,"Algas",1
+4,"Algas",1
+5,"Algas",1
+6,"Algas",1
+7,"Algas",1
+8,"Algas",1
+9,"Algas",1
+10,"Algas",1
+11,"Algas",1
+12,"Algas",1
+13,"Algas",1
+14,"Algas",1
+15,"Algas",1
+16,"Algas",1
+17,"Algas",1
+18,"Algas",1
+19,"Algas",1
+20,"Algas",1
+21,"Algas",1
+22,"Algas",1
+23,"Algas",1
+24,"Algas",1
+26,"Algas",1
+27,"Algas",1
+28,"Algas",1
+29,"Algas",1
+30,"Algas",1
+31,"Algas",1
+33,"Algas",1
+34,"Algas",1
+35,"Algas",1
+36,"Algas",1
+37,"Algas",1
+38,"Algas",1
+39,"Algas",1
+40,"Algas",1
+41,"Algas",1
+42,"Algas",1
+43,"Algas",1
+44,"Algas",1
+45,"Algas",1
+46,"Algas",1
+47,"Algas",1
+48,"Algas",1
+49,"Algas",1
+50,"Algas",1
+51,"Algas",1
+52,"Algas",1
+53,"Algas",1
+54,"Algas",1
+55,"Algas",1
+56,"Algas",1
+57,"Algas",1
+58,"Algas",1
+59,"Algas",1
+60,"Algas",1
+61,"Algas",1
+62,"Algas",1
+63,"Algas",1
+64,"Algas",1
+65,"Algas",1
+66,"Algas",1
+67,"Algas",1
+68,"Algas",1
+69,"Algas",1
+70,"Algas",1
+71,"Algas",1
+72,"Algas",1
+73,"Algas",1
+74,"Algas",1
+75,"Algas",1
+76,"Algas",1
+77,"Algas",1
+78,"Algas",1
+79,"Algas",1
+80,"Algas",1
+81,"Algas",1
+82,"Algas",1
+83,"Algas",1
+84,"Algas",1
+85,"Algas",1
+86,"Algas",1
+87,"Algas",1
+88,"Algas",1
+89,"Algas",1
+90,"Algas",1
+91,"Algas",1
+92,"Algas",1
+93,"Algas",1
+94,"Algas",1
+95,"Algas",1
+96,"Algas",1
+97,"Algas",1
+98,"Algas",1
+99,"Algas",1
+100,"Algas",1
+101,"Algas",1
+102,"Algas",1
+103,"Algas",1
+1,"Pastos",1
+3,"Pastos",1
+4,"Pastos",1
+5,"Pastos",1
+9,"Pastos",1
+10,"Pastos",1
+11,"Pastos",1
+13,"Pastos",1
+15,"Pastos",1
+18,"Pastos",1
+25,"Pastos",1
+26,"Pastos",1
+28,"Pastos",1
+29,"Pastos",1
+36,"Pastos",1
+42,"Pastos",1
+43,"Pastos",1
+54,"Pastos",1
+55,"Pastos",1
+58,"Pastos",1
+62,"Pastos",1
+69,"Pastos",1
+79,"Pastos",1
+82,"Pastos",1
+89,"Pastos",1
+90,"Pastos",1
+93,"Pastos",1
+100,"Pastos",1
+101,"Pastos",1
+102,"Pastos",1
+103,"Pastos",1
+1,"Marismas y Humedales",1
+2,"Marismas y Humedales",1
+3,"Marismas y Humedales",1
+4,"Marismas y Humedales",1
+5,"Marismas y Humedales",1
+6,"Marismas y Humedales",1
+7,"Marismas y Humedales",1
+8,"Marismas y Humedales",1
+9,"Marismas y Humedales",1
+10,"Marismas y Humedales",1
+11,"Marismas y Humedales",1
+12,"Marismas y Humedales",1
+13,"Marismas y Humedales",1
+14,"Marismas y Humedales",1
+15,"Marismas y Humedales",1
+16,"Marismas y Humedales",1
+17,"Marismas y Humedales",1
+18,"Marismas y Humedales",1
+19,"Marismas y Humedales",1
+20,"Marismas y Humedales",1
+21,"Marismas y Humedales",1
+22,"Marismas y Humedales",1
+23,"Marismas y Humedales",1
+24,"Marismas y Humedales",1
+25,"Marismas y Humedales",1
+26,"Marismas y Humedales",1
+27,"Marismas y Humedales",1
+28,"Marismas y Humedales",1
+29,"Marismas y Humedales",1
+30,"Marismas y Humedales",1
+31,"Marismas y Humedales",1
+32,"Marismas y Humedales",1
+33,"Marismas y Humedales",1
+34,"Marismas y Humedales",1
+35,"Marismas y Humedales",1
+36,"Marismas y Humedales",1
+37,"Marismas y Humedales",1
+39,"Marismas y Humedales",1
+40,"Marismas y Humedales",1
+41,"Marismas y Humedales",1
+42,"Marismas y Humedales",1
+43,"Marismas y Humedales",1
+44,"Marismas y Humedales",1
+45,"Marismas y Humedales",1
+46,"Marismas y Humedales",1
+47,"Marismas y Humedales",1
+48,"Marismas y Humedales",1
+49,"Marismas y Humedales",1
+50,"Marismas y Humedales",1
+51,"Marismas y Humedales",1
+52,"Marismas y Humedales",1
+53,"Marismas y Humedales",1
+54,"Marismas y Humedales",1
+55,"Marismas y Humedales",1
+56,"Marismas y Humedales",1
+57,"Marismas y Humedales",1
+58,"Marismas y Humedales",1
+59,"Marismas y Humedales",1
+60,"Marismas y Humedales",1
+61,"Marismas y Humedales",1
+62,"Marismas y Humedales",1
+63,"Marismas y Humedales",1
+64,"Marismas y Humedales",1
+65,"Marismas y Humedales",1
+66,"Marismas y Humedales",1
+67,"Marismas y Humedales",1
+68,"Marismas y Humedales",1
+69,"Marismas y Humedales",1
+70,"Marismas y Humedales",1
+71,"Marismas y Humedales",1
+72,"Marismas y Humedales",1
+73,"Marismas y Humedales",1
+74,"Marismas y Humedales",1
+75,"Marismas y Humedales",1
+76,"Marismas y Humedales",1
+77,"Marismas y Humedales",1
+78,"Marismas y Humedales",1
+79,"Marismas y Humedales",1
+80,"Marismas y Humedales",1
+81,"Marismas y Humedales",1
+82,"Marismas y Humedales",1
+83,"Marismas y Humedales",1
+85,"Marismas y Humedales",1
+86,"Marismas y Humedales",1
+87,"Marismas y Humedales",1
+88,"Marismas y Humedales",1
+89,"Marismas y Humedales",1
+90,"Marismas y Humedales",1
+91,"Marismas y Humedales",1
+92,"Marismas y Humedales",1
+93,"Marismas y Humedales",1
+94,"Marismas y Humedales",1
+95,"Marismas y Humedales",1
+96,"Marismas y Humedales",1
+97,"Marismas y Humedales",1
+98,"Marismas y Humedales",1
+99,"Marismas y Humedales",1
+100,"Marismas y Humedales",1
+101,"Marismas y Humedales",1
+102,"Marismas y Humedales",1
+103,"Marismas y Humedales",1
+1,"Bosques y Matorrales",1
+2,"Bosques y Matorrales",1
+4,"Bosques y Matorrales",1
+5,"Bosques y Matorrales",1
+6,"Bosques y Matorrales",1
+7,"Bosques y Matorrales",1
+8,"Bosques y Matorrales",1
+9,"Bosques y Matorrales",1
+10,"Bosques y Matorrales",1
+11,"Bosques y Matorrales",1
+12,"Bosques y Matorrales",1
+13,"Bosques y Matorrales",1
+14,"Bosques y Matorrales",1
+15,"Bosques y Matorrales",1
+16,"Bosques y Matorrales",1
+17,"Bosques y Matorrales",1
+18,"Bosques y Matorrales",1
+19,"Bosques y Matorrales",1
+20,"Bosques y Matorrales",1
+21,"Bosques y Matorrales",1
+22,"Bosques y Matorrales",1
+23,"Bosques y Matorrales",1
+24,"Bosques y Matorrales",1
+25,"Bosques y Matorrales",1
+26,"Bosques y Matorrales",1
+27,"Bosques y Matorrales",1
+28,"Bosques y Matorrales",1
+29,"Bosques y Matorrales",1
+30,"Bosques y Matorrales",1
+31,"Bosques y Matorrales",1
+32,"Bosques y Matorrales",1
+33,"Bosques y Matorrales",1
+34,"Bosques y Matorrales",1
+35,"Bosques y Matorrales",1
+36,"Bosques y Matorrales",1
+39,"Bosques y Matorrales",1
+40,"Bosques y Matorrales",1
+41,"Bosques y Matorrales",1
+42,"Bosques y Matorrales",1
+44,"Bosques y Matorrales",1
+45,"Bosques y Matorrales",1
+46,"Bosques y Matorrales",1
+47,"Bosques y Matorrales",1
+49,"Bosques y Matorrales",1
+50,"Bosques y Matorrales",1
+51,"Bosques y Matorrales",1
+52,"Bosques y Matorrales",1
+53,"Bosques y Matorrales",1
+54,"Bosques y Matorrales",1
+55,"Bosques y Matorrales",1
+56,"Bosques y Matorrales",1
+57,"Bosques y Matorrales",1
+59,"Bosques y Matorrales",1
+60,"Bosques y Matorrales",1
+61,"Bosques y Matorrales",1
+62,"Bosques y Matorrales",1
+63,"Bosques y Matorrales",1
+64,"Bosques y Matorrales",1
+65,"Bosques y Matorrales",1
+66,"Bosques y Matorrales",1
+67,"Bosques y Matorrales",1
+68,"Bosques y Matorrales",1
+69,"Bosques y Matorrales",1
+70,"Bosques y Matorrales",1
+71,"Bosques y Matorrales",1
+72,"Bosques y Matorrales",1
+73,"Bosques y Matorrales",1
+75,"Bosques y Matorrales",1
+76,"Bosques y Matorrales",1
+77,"Bosques y Matorrales",1
+78,"Bosques y Matorrales",1
+79,"Bosques y Matorrales",1
+80,"Bosques y Matorrales",1
+81,"Bosques y Matorrales",1
+82,"Bosques y Matorrales",1
+83,"Bosques y Matorrales",1
+85,"Bosques y Matorrales",1
+86,"Bosques y Matorrales",1
+87,"Bosques y Matorrales",1
+88,"Bosques y Matorrales",1
+89,"Bosques y Matorrales",1
+90,"Bosques y Matorrales",1
+91,"Bosques y Matorrales",1
+92,"Bosques y Matorrales",1
+93,"Bosques y Matorrales",1
+94,"Bosques y Matorrales",1
+95,"Bosques y Matorrales",1
+97,"Bosques y Matorrales",1
+98,"Bosques y Matorrales",1
+99,"Bosques y Matorrales",1
+100,"Bosques y Matorrales",1
+101,"Bosques y Matorrales",1
+102,"Bosques y Matorrales",1
+103,"Bosques y Matorrales",1
+1,"Playas y Dunas",1
+2,"Playas y Dunas",1
+3,"Playas y Dunas",1
+4,"Playas y Dunas",1
+5,"Playas y Dunas",1
+6,"Playas y Dunas",1
+7,"Playas y Dunas",1
+8,"Playas y Dunas",1
+9,"Playas y Dunas",1
+10,"Playas y Dunas",1
+11,"Playas y Dunas",1
+12,"Playas y Dunas",1
+14,"Playas y Dunas",1
+15,"Playas y Dunas",1
+16,"Playas y Dunas",1
+17,"Playas y Dunas",1
+18,"Playas y Dunas",1
+19,"Playas y Dunas",1
+20,"Playas y Dunas",1
+21,"Playas y Dunas",1
+22,"Playas y Dunas",1
+23,"Playas y Dunas",1
+24,"Playas y Dunas",1
+25,"Playas y Dunas",1
+26,"Playas y Dunas",1
+27,"Playas y Dunas",1
+28,"Playas y Dunas",1
+29,"Playas y Dunas",1
+30,"Playas y Dunas",1
+32,"Playas y Dunas",1
+33,"Playas y Dunas",1
+34,"Playas y Dunas",1
+35,"Playas y Dunas",1
+36,"Playas y Dunas",1
+37,"Playas y Dunas",1
+39,"Playas y Dunas",1
+40,"Playas y Dunas",1
+41,"Playas y Dunas",1
+42,"Playas y Dunas",1
+43,"Playas y Dunas",1
+44,"Playas y Dunas",1
+45,"Playas y Dunas",1
+46,"Playas y Dunas",1
+47,"Playas y Dunas",1
+48,"Playas y Dunas",1
+49,"Playas y Dunas",1
+50,"Playas y Dunas",1
+51,"Playas y Dunas",1
+52,"Playas y Dunas",1
+53,"Playas y Dunas",1
+54,"Playas y Dunas",1
+55,"Playas y Dunas",1
+56,"Playas y Dunas",1
+57,"Playas y Dunas",1
+58,"Playas y Dunas",1
+59,"Playas y Dunas",1
+60,"Playas y Dunas",1
+61,"Playas y Dunas",1
+62,"Playas y Dunas",1
+63,"Playas y Dunas",1
+64,"Playas y Dunas",1
+65,"Playas y Dunas",1
+66,"Playas y Dunas",1
+67,"Playas y Dunas",1
+68,"Playas y Dunas",1
+69,"Playas y Dunas",1
+70,"Playas y Dunas",1
+71,"Playas y Dunas",1
+72,"Playas y Dunas",1
+73,"Playas y Dunas",1
+74,"Playas y Dunas",1
+75,"Playas y Dunas",1
+76,"Playas y Dunas",1
+77,"Playas y Dunas",1
+78,"Playas y Dunas",1
+79,"Playas y Dunas",1
+80,"Playas y Dunas",1
+81,"Playas y Dunas",1
+82,"Playas y Dunas",1
+83,"Playas y Dunas",1
+85,"Playas y Dunas",1
+86,"Playas y Dunas",1
+87,"Playas y Dunas",1
+88,"Playas y Dunas",1
+89,"Playas y Dunas",1
+90,"Playas y Dunas",1
+91,"Playas y Dunas",1
+92,"Playas y Dunas",1
+93,"Playas y Dunas",1
+94,"Playas y Dunas",1
+95,"Playas y Dunas",1
+96,"Playas y Dunas",1
+97,"Playas y Dunas",1
+98,"Playas y Dunas",1
+99,"Playas y Dunas",1
+100,"Playas y Dunas",1
+101,"Playas y Dunas",1
+102,"Playas y Dunas",1
+103,"Playas y Dunas",1
+1,"Bentonico",1
+3,"Bentonico",1
+4,"Bentonico",1
+5,"Bentonico",1
+6,"Bentonico",1
+7,"Bentonico",1
+9,"Bentonico",1
+10,"Bentonico",1
+11,"Bentonico",1
+12,"Bentonico",1
+13,"Bentonico",1
+14,"Bentonico",1
+15,"Bentonico",1
+16,"Bentonico",1
+18,"Bentonico",1
+19,"Bentonico",1
+20,"Bentonico",1
+21,"Bentonico",1
+22,"Bentonico",1
+24,"Bentonico",1
+25,"Bentonico",1
+26,"Bentonico",1
+27,"Bentonico",1
+28,"Bentonico",1
+29,"Bentonico",1
+30,"Bentonico",1
+32,"Bentonico",1
+33,"Bentonico",1
+34,"Bentonico",1
+35,"Bentonico",1
+36,"Bentonico",1
+37,"Bentonico",1
+40,"Bentonico",1
+41,"Bentonico",1
+42,"Bentonico",1
+43,"Bentonico",1
+44,"Bentonico",1
+45,"Bentonico",1
+46,"Bentonico",1
+47,"Bentonico",1
+49,"Bentonico",1
+50,"Bentonico",1
+51,"Bentonico",1
+52,"Bentonico",1
+53,"Bentonico",1
+54,"Bentonico",1
+55,"Bentonico",1
+56,"Bentonico",1
+58,"Bentonico",1
+59,"Bentonico",1
+60,"Bentonico",1
+61,"Bentonico",1
+62,"Bentonico",1
+63,"Bentonico",1
+64,"Bentonico",1
+65,"Bentonico",1
+66,"Bentonico",1
+69,"Bentonico",1
+72,"Bentonico",1
+74,"Bentonico",1
+76,"Bentonico",1
+79,"Bentonico",1
+80,"Bentonico",1
+82,"Bentonico",1
+83,"Bentonico",1
+85,"Bentonico",1
+86,"Bentonico",1
+87,"Bentonico",1
+88,"Bentonico",1
+89,"Bentonico",1
+90,"Bentonico",1
+92,"Bentonico",1
+93,"Bentonico",1
+94,"Bentonico",1
+95,"Bentonico",1
+97,"Bentonico",1
+98,"Bentonico",1
+99,"Bentonico",1
+100,"Bentonico",1
+101,"Bentonico",1
+102,"Bentonico",1
+103,"Bentonico",1
