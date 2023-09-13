@@ -3,34 +3,53 @@ library(dplyr)
 library(reshape2)
 library(readr)
 
+#Algas
+#Pastos
+#Marismas y Humedales
+#Bosques y Mat
+#Playas y Dunas
+#bentónico
 
-hab <- read_delim("prep/HAB/hab_status_trend_chl_2021.csv",
-                  delim = ";", escape_double = FALSE, trim_ws = TRUE)
+hab <- read_excel("prep/HAB/hab.xlsx", sheet = "bentónico")
 
-hab<- hab %>% select(-c("rgn_name")) %>%
-  melt(id.vars = c("rgn_id", "habitat")) %>%
+hab<- hab[,c(1,4:8)]
+
+hab<- hab %>%
+  melt(id.vars = c("rgn_id")) %>%
+  mutate(habitat = "Bentonico") %>%
   select(rgn_id, habitat, year = "variable","value")
 
 hab$year<- as.character(hab$year)
 hab$year<- as.numeric(hab$year)
 
-##superficie total de las comunas
-sup<-hab %>% filter(year ==scenario_years)%>%
-  group_by(rgn_id)%>%
-  dplyr::summarise(total_km2= sum(value)) %>%
-    dplyr::select(rgn_id, total_km2)
+#hab1<- hab
+#hab2<- hab
+#hab3<- hab
+#hab4<- hab
+#hab5<- hab
+#hab6<- hab
 
+hab<- rbind(hab1, hab2, hab3, hab4, hab5, hab6)
+hab <- hab[!is.na(hab$value),]
+
+
+write.csv(hab, "comunas/layers/hab_extension_chl2023.csv", row.names = F, na = "")
+
+##superficie total de las comunas
+area <- read_excel("prep/HAB/hab.xlsx", sheet = "Playas y Dunas") %>%
+  select(rgn_id, area_km2)
+
+write.csv(area, "comunas/layers/hab_area_chl2023.csv", row.names = F, na = "")
 
 ##Functions
-hab<- merge(hab, sup)
-
+hab<- merge(hab, area)
 
 ##Punto de ref
 p_ref<- hab %>%
-  dplyr::mutate(p_ref = value/ total_km2)  %>%
-  dplyr::group_by(habitat) %>%
-  dplyr::summarise(ref = max(p_ref,  na.rm = TRUE)) %>%
-  dplyr::select(habitat, ref)
+  dplyr::mutate(por = value/ area_km2)  %>%
+  dplyr::group_by(rgn_id, habitat) %>%
+  dplyr::summarise(ref = max(por,  na.rm = TRUE)) %>%
+  dplyr::select(rgn_id, habitat, ref)
 
 ## Numero de habitats
 com_hab <- hab[!is.na(hab$value),]
@@ -48,10 +67,10 @@ com_h1 <- com_h1[!is.na(com_h1$n_h),]
 
 ##Scores
 hab<- merge(com_hab, p_ref)
-hab<-merge(hab, sup)
+hab<-merge(hab, area)
 
 scores_hab<- hab %>%
-  dplyr::mutate(Cc= value/total_km2)  %>%
+  dplyr::mutate(Cc= value/area_km2)  %>%
   dplyr::mutate(C= Cc/ref) %>%
   dplyr::group_by(rgn_id, year) %>%
   dplyr::summarise(c_sum = sum(C,  na.rm = TRUE)) %>%
@@ -60,7 +79,7 @@ scores_hab<- hab %>%
 
 
 ##Status
-scores_hab <- scores_hab %>%
+status_hab <- scores_hab %>%
   filter(year ==scenario_years) %>%
   mutate(dimension = 'status',
          score     = round(status, 4)) %>%
@@ -69,24 +88,26 @@ scores_hab <- scores_hab %>%
 
 
 ##Tendencia
-#Debido a que el cambio de cobertura de los habitats no estan disponibles al momento de la realización de este indice
-#Utilizaremos la tedencia 0, suponiendo que ese es el presente estudio es el habitat inicial
+trend_years <- (scen_year - 4):(scen_year)
 
-trend_data<- data.frame(region_id = c(1:36),
-                        goal = c(rep("HAB", 36)),
-                        dimension = c(rep("trend", 36)),
-                        score = c(rep(0, 36)))
+r.trend <-
+  CalculateTrend(status_data = scores_hab, trend_years = trend_years)
 
 
-
-scores<- rbind(scores_hab, trend_data)
+scores<- r.trend %>%
+  mutate(goal = 'HAB') %>%
+  rbind(status_hab)
 
 
 
 
+boolean<- hab %>%
+  filter(year == 2021) %>%
+  select(rgn_id, habitat) %>%
+  mutate(boolean = 1)
 
 
-
+write.csv(boolean,"comunas/layers/element_wts_hab_pres_abs_chl2023.csv", row.names = F, na = "")
 
 
 
