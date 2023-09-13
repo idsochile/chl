@@ -19,54 +19,46 @@ library(dplyr)
 
 
 ```{r}
-sp<- merge(sp_grid, ESPECIES_MMA, 
-           all.x = T)
+####
+sp <- read_excel("C:/github/chl/prep/SPP/sp_final.xlsx")
+regions_list <- read_csv("C:/github/chl/comunas/spatial/regions_list.csv")
+
+sp2<- sp %>%
+  group_by(rgn_name) %>%
+  dplyr::summarise(mean=c(mean(state)),
+            sum = sum(state), 
+            n = n()) %>%
+  left_join(regions_list, by= "rgn_name") %>%
+  mutate(xspp = (sum/(n/area_km2)),
+         status = pmax(c((mean - 0.25)/0.75), 0)*100,
+         dimension = "status") %>%
+  select(region_id = rgn_id, dimension, score = status)
+
+chl<- merge(chl, sp2)
+
+ggplot()+
+  geom_sf(data = chl, aes(fill= mean))+
+  scale_fill_gradientn(colors = color_palette, limits = c(0, 100))+
+  theme_light()+
+  theme(legend.position = "left")
 
 
-status<- data.frame(IUCN= c("EX", "CR", "EN", "VU", "NT", "LC"),
-                    cat = c(0,0.2,0.4,0.6,0.8,1))
-sp<- merge(sp, status)
+write.table(sp2, "clipboard", sep="\t", row.names=F)
 
-sp2<- sp%>%
-  group_by(grid_id) %>%
-  summarise(sum= sum(cat),
-            n= n())
-
-sp<- sp %>%
-  select(grid_id, area_grid, rgn_id)
-
-sp<- sp[!duplicated(sp), ]
-
-sp3<- merge(sp2,sp)
-
-status <- sp3 %>%
-  dplyr::mutate(A = sum * area_grid,
-                B = area_grid* n)  %>%
-  group_by(rgn_id) %>%
-  summarise(rspp = c(sum(A))/ c(sum(B)))
-
-xspp<-  status %>%
-  mutate(status = pmax(c((rspp - 0.3)/0.70), 0)*100)
-
-write.table(xspp, "clipboard", sep="\t", row.names=F)
+write.csv(sp2, "C:/github/chl/comunas/layers/spp_status_chl2023.csv", row.names = F, na = "")
 ```
 
 
 ```{r}
-trend<-  data.frame("trend"= c("Creciente", "Estable", "Decreciendo"),
-                    cat = c(0.5, 0, -0.5))
-
-sp<- merge(sp_grid, ESPECIES_MMA, all.x = T)
-
-sp<- merge(sp, trend)
-
-
 sp2<- sp %>%
-  group_by(rgn_id) %>%
-  summarise(trend= mean(cat))%>%
+  left_join(regions_list, by = "rgn_name") %>%
+  select(region_id = "rgn_id", trend) %>%
+  group_by(region_id) %>%
+  dplyr::summarise(score= mean(trend))%>%
   mutate(dimension = "trend")
 
 write.table(sp2, "clipboard", sep="\t", row.names=F)
+write.csv(sp2, "C:/github/chl/comunas/layers/spp_trend_chl2023.csv", row.names = F, na = "")
 ```
 
 
