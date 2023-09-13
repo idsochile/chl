@@ -21,3 +21,62 @@ write.csv(layers, "comunas/layers.csv", row.names = FALSE)
 
 
 
+
+
+Matriz
+```{r}
+library(readxl)
+matriz <- read_excel("prep/_resilience/Matriz metas-resiliencias OHI Chile.xlsx",
+                               sheet = "matriz")
+
+write.csv(matriz, "comunas/conf/resilience_matrix.csv",
+          row.names = F, na = "")
+
+category <- read_excel("prep/_resilience/Matriz metas-resiliencias OHI Chile.xlsx",
+                     sheet = "category")
+
+write.csv(category, "comunas/conf/resilience_categories.csv",
+          row.names = F, na = "")
+
+```
+
+
+
+```{r}
+library(readxl)
+matriz <- read_excel("prep/_pressures/matrizjunio2023presiones.xlsb.xlsx",
+                               sheet = "matrizB")
+
+write.csv(matriz, "comunas/conf/pressures_matrix.csv",
+          row.names = F, na = "")
+
+category <- read_excel("prep/_pressures/matrizjunio2023presiones.xlsb.xlsx",
+                     sheet = "categoryB")
+
+write.csv(category, "comunas/conf/pressure_categories.csv",
+          row.names = F, na = "")
+
+```
+
+```{r}
+goals <- read_excel("comunas/conf/goals.xlsx")
+
+write.csv(goals, "comunas/conf/goals.csv", row.names = F, na = "")
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
