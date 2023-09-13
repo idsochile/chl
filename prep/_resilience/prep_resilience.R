@@ -4,7 +4,8 @@ library(scales)
 
 #################
 
-data <-  read_excel("prep/_resilience/Resiliencia_Ramsar.xlsx")
+data <-  read_excel("prep/_resilience/prot.xlsx",
+                    sheet = "regiones")
 
 data<- select(data, rgn_id, resilience_score)
 
