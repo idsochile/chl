@@ -2,46 +2,74 @@ library(readxl)
 library(dplyr)
 library(reshape2)
 
-algas<- read_excel("prep/CS/cs_rgn_chl_2023.xlsx", sheet = "Kelp Forest")
+algas<- read_excel("prep/CS/cs_rgn_chl_2023 (1).xlsx", sheet = "Kelp Forest")
 
-algas<- algas %>% select(-c("rgn_name")) %>%
+algas<- algas[,c(1,4:8)]
+
+algas<- algas %>%
   melt( id.vars = "rgn_id") %>%
   mutate(habitat = c("Kelp forest")) %>%
-  select(rgn_id ,year = "variable", habitat, km2 = "value")
+  select(rgn_id ,year = "variable", habitat, m2 = "value")
 
 
-pastos<- read_excel("prep/CS/cs_rgn_chl_2023.xlsx", sheet = "Seagrass")
 
-pastos<- pastos %>% select(-c("rgn_name")) %>%
+
+pastos<- read_excel("prep/CS/cs_rgn_chl_2023 (1).xlsx", sheet = "Seagrass")
+
+pastos<- pastos[,c(1,4:8)]
+
+pastos<- pastos %>%
   melt( id.vars = "rgn_id") %>%
   mutate(habitat = c("Seagrass")) %>%
-  select(rgn_id ,year = "variable", habitat, km2 = "value")
+  select(rgn_id ,year = "variable", habitat, m2 = "value")
 
 
-marismas<- read_excel("prep/CS/cs_rgn_chl_2023.xlsx", sheet = "Tidal flats")
+marismas<- read_excel("prep/CS/cs_rgn_chl_2023 (1).xlsx", sheet = "Tidal flats")
 
-marismas<- marismas %>% select(-c("rgn_name")) %>%
+marismas<- marismas[,c(1,4:8)]
+
+marismas<- marismas %>%
   melt( id.vars = "rgn_id") %>%
   mutate(habitat = c("Tidal flats")) %>%
-  select(rgn_id ,year = "variable", habitat, km2 = "value")
+  select(rgn_id ,year = "variable", habitat, m2 = "value")
 
 cs<- rbind(algas, pastos, marismas)
 
+cs$m2<- cs$m2*1000000
 
-write.csv(cs, "comunas/layers/cs_habitat_extent_chl2021.csv",
+cs<- cs %>%
+  group_by(rgn_id, habitat) %>%
+  mutate(p = sum(m2)) %>%
+  filter(m2 > 0) %>%
+  select(- p)
+
+
+write.csv(cs, "comunas/layers/cs_habitat_extent_chl2023.csv",
+          row.names = F,
+          na= "")
+
+####
+
+p_ref<- cs %>%
+  group_by(rgn_id,habitat) %>%
+  summarise(p_ref = max(m2))
+
+write.csv(p_ref, "comunas/layers/cs_habitat_pref_chl2023.csv",
           row.names = F,
           na= "")
 
 
-PR<- read_excel("prep/CS/cs_rgn_chl_2023.xlsx", sheet = "Punto referencia")
+#### area ####
 
-p_ref<- PR %>% select(rgn_id , "Kelp forest"=  "Kelp Forest" ,
-                      "Seagrass" ,
-                   "Tidal flats")%>%
-  melt( id.vars = "rgn_id") %>%
-  select(rgn_id, "habitat" = "variable", "p_ref" = "value")
+area<- read_excel("prep/CS/cs_rgn_chl_2023 (1).xlsx", sheet = "Kelp Forest")
 
-write.csv(p_ref, "comunas/layers/cs_habitat_pref_chl2021.csv",
+area <- area[,c(1,3)]
+
+area$m2<- area$AREA_KM2 *1000000
+
+area <- area[,c(1,3)]
+
+write.csv(area, "comunas/layers/cs_area_chl2023.csv",
           row.names = F,
           na= "")
 
@@ -49,10 +77,6 @@ write.csv(p_ref, "comunas/layers/cs_habitat_pref_chl2021.csv",
 ########
 ###Formula
 
-area = SelectLayersData(layers, layers='rgn_area') %>%
-  dplyr::select( rgn_id = "id_num",  area_km2 ="val_num")
-
-cs <- cs[!is.na(cs$km2),]
 
 wt<- mean(coef$w)
 
@@ -61,27 +85,39 @@ cs_b<- area %>%
 
 
 
-cs_scores<- cs %>%
-  dplyr::filter(km2 > 0) %>%
-  dplyr::left_join(p_ref, by = c("rgn_id", "habitat")) %>%
-  dplyr::mutate(h = km2 / p_ref) %>%
-  group_by(rgn_id, year, habitat) %>%
+cs_scores<- p_ref %>%
+  dplyr::left_join(area, by = c("rgn_id")) %>%
+  dplyr::mutate(h = p_ref / m2) %>%
+  select(rgn_id, habitat, h) %>%
   left_join(coef, by = "habitat") %>%
-  dplyr::summarise(A = c(h*w*km2)) %>%
+  left_join(cs, by = c("rgn_id", "habitat")) %>%
+  dplyr::mutate(A = c(h*w*m2),
+                   B = c(w*m2)) %>%
   dplyr::group_by(rgn_id, year)%>%
-  dplyr::summarise(A = sum(A))%>%
-  left_join(cs_b, by = "rgn_id") %>%
+  dplyr::summarise(A = sum(A),
+                   B = sum(B))%>%
   dplyr::mutate(status = (A/B)*100)
 
+write.table(cs_scores, "clipboard", sep="\t", row.names=F)
 
 
+#######MAP############
+
+status<- cs_scores %>%
+  filter(year == 2021) %>%
+  select(region_id = rgn_id, status) %>%
+  ungroup()
 
 
+chl<- merge(chl, status)
 
-
-
-
-
+png("np.png", height = 2500, width = 2000, res = 400)
+ggplot()+
+  geom_sf(data = chl, aes(fill= status))+
+  scale_fill_gradientn(colors = color_palette, limits = c(0, 100))+
+  theme_light()+
+  theme(legend.position = "none")
+dev.off()
 
 
 
