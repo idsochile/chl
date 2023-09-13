@@ -1,38 +1,105 @@
 region_id,region_name,flower_png
-0,OHI+ Patagonia Chilena,comunas/reports/figures/flower_OHI+PatagoniaChilena.png
-33,San Juan de la Costa,comunas/reports/figures/flower_SanJuandelaCosta.png
-35,Torres del Paine,comunas/reports/figures/flower_TorresdelPaine.png
-10,Curaco de Velez,comunas/reports/figures/flower_CuracodeVelez.png
-1,Ancud,comunas/reports/figures/flower_Ancud.png
-2,Aysen,comunas/reports/figures/flower_Aysen.png
-3,Cabo de Hornos,comunas/reports/figures/flower_CabodeHornos.png
-4,Calbuco,comunas/reports/figures/flower_Calbuco.png
-5,Castro,comunas/reports/figures/flower_Castro.png
-6,Chaiten,comunas/reports/figures/flower_Chaiten.png
-7,Chonchi,comunas/reports/figures/flower_Chonchi.png
-8,Cisnes,comunas/reports/figures/flower_Cisnes.png
-9,Cochamo,comunas/reports/figures/flower_Cochamo.png
-11,Dalcahue,comunas/reports/figures/flower_Dalcahue.png
-18,Natales,comunas/reports/figures/flower_Natales.png
-12,Fresia,comunas/reports/figures/flower_Fresia.png
-13,Guaitecas,comunas/reports/figures/flower_Guaitecas.png
-14,Hualaihue,comunas/reports/figures/flower_Hualaihue.png
-15,Laguna Blanca,comunas/reports/figures/flower_LagunaBlanca.png
-16,Los Muermos,comunas/reports/figures/flower_LosMuermos.png
-17,Maullin,comunas/reports/figures/flower_Maullin.png
-19,Porvenir,comunas/reports/figures/flower_Porvenir.png
-20,Primavera,comunas/reports/figures/flower_Primavera.png
-21,Puerto Montt,comunas/reports/figures/flower_PuertoMontt.png
-22,Puerto Varas,comunas/reports/figures/flower_PuertoVaras.png
-23,Punta Arenas,comunas/reports/figures/flower_PuntaArenas.png
-24,Puqueldon,comunas/reports/figures/flower_Puqueldon.png
-25,Purranque,comunas/reports/figures/flower_Purranque.png
-26,Queilen,comunas/reports/figures/flower_Queilen.png
-27,Quellon,comunas/reports/figures/flower_Quellon.png
-28,Quemchi,comunas/reports/figures/flower_Quemchi.png
-29,Quinchao,comunas/reports/figures/flower_Quinchao.png
-30,Rio Negro,comunas/reports/figures/flower_RioNegro.png
-31,Rio Verde,comunas/reports/figures/flower_RioVerde.png
-32,San Gregorio,comunas/reports/figures/flower_SanGregorio.png
-34,Timaukel,comunas/reports/figures/flower_Timaukel.png
-36,Tortel,comunas/reports/figures/flower_Tortel.png
+0,OHI+ Chile,reports/figures/flower_OHI+Chile.png
+1,Algarrobo,reports/figures/flower_Algarrobo.png
+2,Ancud,reports/figures/flower_Ancud.png
+3,Antofagasta,reports/figures/flower_Antofagasta.png
+4,Arauco,reports/figures/flower_Arauco.png
+5,Arica,reports/figures/flower_Arica.png
+6,Aysen,reports/figures/flower_Aysen.png
+7,Cabo de Hornos,reports/figures/flower_CabodeHornos.png
+8,Calbuco,reports/figures/flower_Calbuco.png
+9,Caldera,reports/figures/flower_Caldera.png
+10,Camarones,reports/figures/flower_Camarones.png
+11,Canela,reports/figures/flower_Canela.png
+12,Canete,reports/figures/flower_Canete.png
+13,Carahue,reports/figures/flower_Carahue.png
+14,Cartagena,reports/figures/flower_Cartagena.png
+15,Casablanca,reports/figures/flower_Casablanca.png
+16,Castro,reports/figures/flower_Castro.png
+17,Chaiten,reports/figures/flower_Chaiten.png
+18,Chanaral,reports/figures/flower_Chanaral.png
+19,Chanco,reports/figures/flower_Chanco.png
+20,Chonchi,reports/figures/flower_Chonchi.png
+21,Cisnes,reports/figures/flower_Cisnes.png
+22,Cobquecura,reports/figures/flower_Cobquecura.png
+23,Cochamo,reports/figures/flower_Cochamo.png
+24,Coelemu,reports/figures/flower_Coelemu.png
+25,Concon,reports/figures/flower_Concon.png
+26,Constitucion,reports/figures/flower_Constitucion.png
+27,Copiapo,reports/figures/flower_Copiapo.png
+28,Coquimbo,reports/figures/flower_Coquimbo.png
+29,Coronel,reports/figures/flower_Coronel.png
+30,Corral,reports/figures/flower_Corral.png
+31,Curaco de Velez,reports/figures/flower_CuracodeVelez.png
+32,Curepto,reports/figures/flower_Curepto.png
+33,Dalcahue,reports/figures/flower_Dalcahue.png
+34,El quisco,reports/figures/flower_Elquisco.png
+35,El tabo,reports/figures/flower_Eltabo.png
+36,Freirina,reports/figures/flower_Freirina.png
+37,Fresia,reports/figures/flower_Fresia.png
+38,Guaitecas,reports/figures/flower_Guaitecas.png
+39,Hualaihue,reports/figures/flower_Hualaihue.png
+40,Hualpen,reports/figures/flower_Hualpen.png
+41,Huara,reports/figures/flower_Huara.png
+42,Huasco,reports/figures/flower_Huasco.png
+43,Iquique,reports/figures/flower_Iquique.png
+44,La higuera,reports/figures/flower_Lahiguera.png
+45,La ligua,reports/figures/flower_Laligua.png
+46,La serena,reports/figures/flower_Laserena.png
+47,La union,reports/figures/flower_Launion.png
+48,Laguna Blanca,reports/figures/flower_LagunaBlanca.png
+49,Lebu,reports/figures/flower_Lebu.png
+50,Licanten,reports/figures/flower_Licanten.png
+51,Litueche,reports/figures/flower_Litueche.png
+52,Los alamos,reports/figures/flower_Losalamos.png
+53,Los Muermos,reports/figures/flower_LosMuermos.png
+54,Los vilos,reports/figures/flower_Losvilos.png
+55,Lota,reports/figures/flower_Lota.png
+56,Mariquina,reports/figures/flower_Mariquina.png
+57,Maullin,reports/figures/flower_Maullin.png
+58,Mejillones,reports/figures/flower_Mejillones.png
+59,Natales,reports/figures/flower_Natales.png
+60,Navidad,reports/figures/flower_Navidad.png
+61,Ovalle,reports/figures/flower_Ovalle.png
+62,Papudo,reports/figures/flower_Papudo.png
+63,Paredones,reports/figures/flower_Paredones.png
+64,Pelluhue,reports/figures/flower_Pelluhue.png
+65,Penco,reports/figures/flower_Penco.png
+66,Pichilemu,reports/figures/flower_Pichilemu.png
+67,Porvenir,reports/figures/flower_Porvenir.png
+68,Primavera,reports/figures/flower_Primavera.png
+69,Puchuncavi,reports/figures/flower_Puchuncavi.png
+70,Puerto Montt,reports/figures/flower_PuertoMontt.png
+71,Puerto Varas,reports/figures/flower_PuertoVaras.png
+72,Punta Arenas,reports/figures/flower_PuntaArenas.png
+73,Puqueldon,reports/figures/flower_Puqueldon.png
+74,Purranque,reports/figures/flower_Purranque.png
+75,Queilen,reports/figures/flower_Queilen.png
+76,Quellon,reports/figures/flower_Quellon.png
+77,Quemchi,reports/figures/flower_Quemchi.png
+78,Quinchao,reports/figures/flower_Quinchao.png
+79,Quintero,reports/figures/flower_Quintero.png
+80,Rio Negro,reports/figures/flower_RioNegro.png
+81,Rio Verde,reports/figures/flower_RioVerde.png
+82,Saavedra,reports/figures/flower_Saavedra.png
+83,San antonio,reports/figures/flower_Sanantonio.png
+84,San Gregorio,reports/figures/flower_SanGregorio.png
+85,San Juan de la Costa,reports/figures/flower_SanJuandelaCosta.png
+86,San pedro de la paz,reports/figures/flower_Sanpedrodelapaz.png
+87,Santo domingo,reports/figures/flower_Santodomingo.png
+88,Talcahuano,reports/figures/flower_Talcahuano.png
+89,Taltal,reports/figures/flower_Taltal.png
+90,Teodoro schmidt,reports/figures/flower_Teodoroschmidt.png
+91,Timaukel,reports/figures/flower_Timaukel.png
+92,Tirua,reports/figures/flower_Tirua.png
+93,Tocopilla,reports/figures/flower_Tocopilla.png
+94,Tolten,reports/figures/flower_Tolten.png
+95,Tome,reports/figures/flower_Tome.png
+96,Torres del Paine,reports/figures/flower_TorresdelPaine.png
+97,Tortel,reports/figures/flower_Tortel.png
+98,Treguaco,reports/figures/flower_Treguaco.png
+99,Valdivia,reports/figures/flower_Valdivia.png
+100,Valparaiso,reports/figures/flower_Valparaiso.png
+101,Vichuquen,reports/figures/flower_Vichuquen.png
+102,Vina del mar,reports/figures/flower_Vinadelmar.png
+103,Zapallar,reports/figures/flower_Zapallar.png
