@@ -14,17 +14,91 @@ chl<- select(chl, region_id = "regin_d", region_name = "regn_nm", area_km2 = "ar
 
 factor<- as.factor(chl$region_name)
 
-Puntajes <- read_excel("comunas/reports/Puntajes.xlsx")
+scores <- read_csv("comunas/scores.csv")
 
-s<- Puntajes %>%
-  filter(dimension == "status")
+chl<- merge(chl, scores, all.x = T)
 
-chl<- merge(chl, s, all.x = T)
+## Mel's color palette ----
+reds <-  grDevices::colorRampPalette(
+  c("#A50026", "#D73027", "#F46D43", "#FDAE61", "#FEE090"),
+  space="Lab")(65)
+blues <-  grDevices::colorRampPalette(
+  c("#E0F3F8", "#ABD9E9", "#74ADD1", "#4575B4", "#313695"))(35)
+myPalette <-   c(reds, blues)
 
+## filter ##
+ch<- chl %>%
+  filter(goal == "Index",
+         dimension == "score")
+
+#### map 1
+png("C:/github/chl/comunas/reports/maps/map1.png", height = 2000, width = 1250, res = 300)
 ggplot()+
-  geom_sf(data = chl, aes(fill= score))+
-  scale_fill_gradient(low = "#E5FFFF", high = "#003FFF") +
+  geom_sf(data = ch, aes(fill= score))+
+  scale_fill_gradientn(colors = myPalette, limits = c(0, 100))+
+  labs(fill = "Puntaje")+
+  scale_x_continuous(breaks = c(-76,-70,-66))+
   theme_light()
+dev.off()
+
+### intento 2
+d1 <-  read_excel("prep/_resilience/prot.xlsx",
+                  sheet = "regiones") %>%
+  select(region_id= rgn_id, region)
+d2 <-  read_excel("prep/_resilience/prot.xlsx",
+                  sheet = "regiones2")
+d1<- merge(d1, d2) %>%
+  select(region_id, posicion)
+
+chl<- merge(chl, d1)
+
+## filter ##
+ch<- chl %>%
+  filter(goal == "Index",
+         dimension == "score",
+         posicion == 3)
+
+s1<- ggplot()+
+  geom_sf(data = ch, aes(fill= score))+
+  scale_fill_gradientn(colors = myPalette, limits = c(0, 100))+
+  scale_x_continuous(breaks = c(-76,-70,-66))+
+  theme_light()+
+  theme_light()+theme(legend.position = "none")
+
+ch<- chl %>%
+  filter(goal == "Index",
+         dimension == "score",
+         posicion == 2)
+
+s2 <- ggplot()+
+  geom_sf(data = ch, aes(fill= score))+
+  scale_fill_gradientn(colors = myPalette, limits = c(0, 100))+
+  scale_x_continuous(breaks = c(-76,-70,-66))+
+  theme_light()+
+  theme_light()+theme(legend.position = "none")
+
+ch<- chl %>%
+  filter(goal == "Index",
+         dimension == "score",
+         posicion == 1)
+
+s3 <- ggplot()+
+  geom_sf(data = ch, aes(fill= score))+
+  scale_fill_gradientn(colors = myPalette, limits = c(0, 100))+
+  scale_x_continuous(breaks = c(-76,-70,-66))+
+  theme_light()
+
+
+png("C:/github/chl/comunas/reports/maps/map1.png", height = 2000, width = 2500, res = 300)
+s1+s2+s3
+dev.off()
+
+
+
+
+
+
+
 
 regions_list<- select(regions_list, region_id = "rgn_id",rgn_name )
 
@@ -51,9 +125,12 @@ chl <- chl[!is.na(chl$rgn_id),]
 chl<- select(chl, region_id=rgn_id)
 
 scores <- read_csv("comunas/scores.csv")
-data <-  read_excel("prep/_resilience/prot.xlsx",
+d1 <-  read_excel("prep/_resilience/prot.xlsx",
                     sheet = "regiones") %>%
   select(region_id= rgn_id, region)
+d2 <-  read_excel("prep/_resilience/prot.xlsx",
+                    sheet = "regiones2")
+
 
 data1<- data.frame(region = unique(data$region))
 data1<- edit(data1)
