@@ -9,13 +9,13 @@
 "fsc_acuicultura","ecological","regulatory","fishing_pressure",1
 "fsc_pesca","ecological","regulatory","fishing_pressure",1
 "fsc_amerb","ecological","regulatory","habitat_destruction",1
-"pcr","ecological","regulatory","habitat_destruction",1
+"prc","ecological","regulatory","habitat_destruction",1
 "prot","ecological","regulatory","habitat_destruction",1
-"n_proyexplora","social","social","social",1
+"n_explora","social","social","social",1
 "n_opa","social","social","social",1
 "n_ocomunitarias","social","social","social",1
 "n_fipa","social","social","social",1
-"n_explora","social","social","social",1
+"n_anid","social","social","social",1
 "s_muniverde","social","social","climate_change",1
 "lim_playas","social","social","social",1
 "in_municipales","social","social","social",1
@@ -23,4 +23,4 @@
 "com_ccee","social","social","climate_change",1
 "com_prd","social","social","social",1
 "con_eerr","social","social","climate_change",1
-"est_rrrdd","social","social","social",1
+"est_rrdd","social","social","social",1

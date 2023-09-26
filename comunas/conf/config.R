@@ -16,7 +16,7 @@ layer_region_areas  = 'rgn_area'
 # (note: these are .csv files in the layers folder)
 resilience_element = list('NP'  = 'np_harvest_tonnes_weigth',
                           'CP'  = 'cp_habitat_extent',
-                          'LIV' = 'le_sector_weight',
+                          'LIV' = 'le_sector_weight ',
                           'ECO' = 'le_sector_weight',
                           'HAB' = 'element_wts_hab_pres_abs',
                           'LSP' = 'element_wts_lsp_km2_x_protection')

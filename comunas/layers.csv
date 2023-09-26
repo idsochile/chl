@@ -39,11 +39,11 @@
 "resilience","state_fisheries","state_fisheries_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0.130952381,0.404761905,TRUE,,,,103,FALSE
 "resilience","area_ramsar","area_ramsar_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,0.0608899868766898,TRUE,,,,103,FALSE
 "resilience","por_sp_pm","por_sp_pm_chl_2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,1,TRUE,,,,103,FALSE
-"resilience","area_mp","area_mp_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,0.2546097996464,TRUE,,,,103,FALSE
+"resilience","areas_mp","areas_mp_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,0.2546097996464,TRUE,,,,103,FALSE
 "resilience","cum_n_tratamiento","cum_n_tratamiento_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0.583333333333333,1,TRUE,,,,103,FALSE
-"resilience","fsc_acuicultura_chl2023.csv","fsc_acuicultura_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,1,TRUE,,,,103,FALSE
-"resilience","fsc_pesca_chl2023.csv","fsc_pesca_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,1,TRUE,,,,103,FALSE
-"resilience","fsc_amerb_chl2023.csv","fsc_amerb_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,1,TRUE,,,,103,FALSE
+"resilience","fsc_acuicultura","fsc_acuicultura_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,1,TRUE,,,,103,FALSE
+"resilience","fsc_pesca","fsc_pesca_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,1,TRUE,,,,103,FALSE
+"resilience","fsc_amerb","fsc_amerb_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,1,TRUE,,,,103,FALSE
 "resilience","prc","prc_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,1,TRUE,,,,103,FALSE
 "resilience","prot","prot_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,1,TRUE,,,,103,FALSE
 "resilience","n_opa","n_opa_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,1,TRUE,,,,103,FALSE
@@ -56,9 +56,10 @@
 "resilience","com_prd","com_prd_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,1,TRUE,,,,103,FALSE
 "resilience","con_eerr","con_eerr_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0.00127223606182256,1,TRUE,,,,103,FALSE
 "resilience","n_explora","n_explora_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0.125,1,TRUE,,,,103,FALSE
+"resilience","n_anid","n_anid_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,1,TRUE,,,,103,FALSE
 "resilience","scam","scam_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,1,TRUE,,,,103,FALSE
 "resilience","z_bordecostero","z_bordecostero_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0,1,TRUE,,,,103,FALSE
-"resilience","est_rrrdd_chl","est_rrrdd_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0.5,1,TRUE,,,,103,FALSE
+"resilience","est_rrdd","est_rrdd_chl2023.csv","resilience_score","scaled 0-1","",,"","","rgn_id",,,,"resilience_score",,TRUE,,,0.5,1,TRUE,,,,103,FALSE
 "pressure","sp_invasoras","sp_invasoras_chl2023.csv","pressure_score","scaled 0-1","",,"","","rgn_id",,,,"pressure_score",,TRUE,,,0.00067411963186172,1,TRUE,,,,103,FALSE
 "pressure","turismo_cost","turismo_cost_chl2023.csv","pressure_score","scaled 0-1","",,"","","rgn_id",,,,"pressure_score",,TRUE,,,0.0100659463873179,1,TRUE,,,,103,FALSE
 "pressure","des_habitat_marino","des_habitat_marino_chl2023.csv","pressure_score","scaled 0-1","",,"","","rgn_id",,,,"pressure_score",,TRUE,,,0,1,TRUE,,,1,103,FALSE
