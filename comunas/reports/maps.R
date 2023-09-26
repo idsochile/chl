@@ -9,8 +9,14 @@ library(colorBlindness)
 library(patchwork)
 
 
-chl<- st_read("comunas/spatial/rgn_cl.shp")
-chl<- select(chl, region_id = "regin_d", region_name = "regn_nm", area_km2 = "are_km2")
+sf_use_s2(FALSE)
+chl<- st_read("C:/R/OHI/shape/comunas.shp")
+chl2<- st_read("C:/R/OHI/shape/com5.shp") %>%
+  as.data.frame() %>%
+  select(objectid, rgn_id = region_id)
+chl<- merge(chl, chl2)
+chile<- st_read("C:/R/OHI/shape/chil_cont.shp")
+chl<- select(chl, region_id=rgn_id)
 
 factor<- as.factor(chl$region_name)
 
@@ -26,44 +32,30 @@ blues <-  grDevices::colorRampPalette(
   c("#E0F3F8", "#ABD9E9", "#74ADD1", "#4575B4", "#313695"))(35)
 myPalette <-   c(reds, blues)
 
-## filter ##
-ch<- chl %>%
-  filter(goal == "Index",
-         dimension == "score")
 
-#### map 1
-png("C:/github/chl/comunas/reports/maps/map1.png", height = 2000, width = 1250, res = 300)
-ggplot()+
-  geom_sf(data = ch, aes(fill= score))+
-  scale_fill_gradientn(colors = myPalette, limits = c(0, 100))+
-  labs(fill = "Puntaje")+
-  scale_x_continuous(breaks = c(-76,-70,-66))+
-  theme_light()
-dev.off()
-
-### intento 2
+### map 1 ####
 d1 <-  read_excel("prep/_resilience/prot.xlsx",
                   sheet = "regiones") %>%
-  select(region_id= rgn_id, region)
-d2 <-  read_excel("prep/_resilience/prot.xlsx",
-                  sheet = "regiones2")
-d1<- merge(d1, d2) %>%
-  select(region_id, posicion)
+  select(region_id= rgn_id, region, posicion)
+
 
 chl<- merge(chl, d1)
 
-## filter ##
+#### filter ####
 ch<- chl %>%
   filter(goal == "Index",
          dimension == "score",
          posicion == 3)
 
+
 s1<- ggplot()+
+  geom_sf(data= chile)+
   geom_sf(data = ch, aes(fill= score))+
   scale_fill_gradientn(colors = myPalette, limits = c(0, 100))+
-  scale_x_continuous(breaks = c(-76,-70,-66))+
+  scale_x_continuous(breaks = c(-73,-70,-68), limits = c(-73.2,-68))+
+  ylim(c(-30, -18))+
   theme_light()+
-  theme_light()+theme(legend.position = "none")
+  theme(legend.position = "none")
 
 ch<- chl %>%
   filter(goal == "Index",
@@ -71,11 +63,14 @@ ch<- chl %>%
          posicion == 2)
 
 s2 <- ggplot()+
+  geom_sf(data = chile)+
   geom_sf(data = ch, aes(fill= score))+
   scale_fill_gradientn(colors = myPalette, limits = c(0, 100))+
-  scale_x_continuous(breaks = c(-76,-70,-66))+
+  scale_x_continuous(breaks = c(-74,-70,-68), limits = c(-74,-68))+
+  ylim(c(-42, -30))+
   theme_light()+
-  theme_light()+theme(legend.position = "none")
+  theme(legend.position = "none")
+
 
 ch<- chl %>%
   filter(goal == "Index",
@@ -83,17 +78,23 @@ ch<- chl %>%
          posicion == 1)
 
 s3 <- ggplot()+
+  geom_sf(data = chile)+
   geom_sf(data = ch, aes(fill= score))+
   scale_fill_gradientn(colors = myPalette, limits = c(0, 100))+
   scale_x_continuous(breaks = c(-76,-70,-66))+
-  theme_light()
+  ylim(c(-56,-42))+
+  theme_light()+
+  theme(legend.position = c(0.67, 0.84), legend.justification = c(0, 0.5))+
+  labs(fill='Puntaje')
 
 
-png("C:/github/chl/comunas/reports/maps/map1.png", height = 2000, width = 2500, res = 300)
-s1+s2+s3
+p <- s1 + s2 + s3
+
+png("C:/github/chl/comunas/reports/maps/map1.png", height = 1800, width = 2500, res = 300)
+p
 dev.off()
 
-
+### resto ####
 
 
 
@@ -128,8 +129,6 @@ scores <- read_csv("comunas/scores.csv")
 d1 <-  read_excel("prep/_resilience/prot.xlsx",
                     sheet = "regiones") %>%
   select(region_id= rgn_id, region)
-d2 <-  read_excel("prep/_resilience/prot.xlsx",
-                    sheet = "regiones2")
 
 
 data1<- data.frame(region = unique(data$region))
